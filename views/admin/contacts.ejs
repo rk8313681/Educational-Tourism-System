@@ -1,0 +1,55 @@
+<% layout("/layouts/admin") %>
+
+<div class="container py-4">
+  <h2 class="fw-bold mb-4">Contact Inquiries</h2>
+
+  <% if (contacts.length === 0) { %>
+    <div class="alert alert-info">No contact inquiries yet.</div>
+  <% } %>
+
+  <div class="row g-4">
+    <% contacts.forEach((contact) => { %>
+      <div class="col-lg-6">
+  <div class="contact-card p-4 h-100">
+
+    <div class="d-flex justify-content-between align-items-start mb-3">
+      <h5 class="fw-bold mb-0 text-primary">
+        <i class="fa-solid fa-envelope me-2"></i>
+        <%= contact.subject %>
+      </h5>
+
+      <span class="badge bg-light text-dark">
+        <%= new Date(contact.createdAt).toLocaleDateString("en-IN") %>
+      </span>
+    </div>
+
+    <div class="contact-info">
+      <p><i class="fa-solid fa-user"></i> <strong>Name:</strong> <%= contact.fullName %></p>
+      <p><i class="fa-solid fa-envelope"></i> <strong>Email:</strong> <%= contact.email %></p>
+      <p><i class="fa-solid fa-phone"></i> <strong>Phone:</strong> <%= contact.phone %></p>
+      <p><i class="fa-solid fa-building"></i> <strong>Institution:</strong> <%= contact.institution || "N/A" %></p>
+    </div>
+
+    <div class="message-box mt-3">
+      <strong>Message:</strong>
+      <p class="mb-0"><%= contact.message %></p>
+    </div>
+
+    <div class="mt-4 d-flex justify-content-between align-items-center">
+      <small class="text-muted">
+        <i class="fa-regular fa-clock"></i>
+        <%= new Date(contact.createdAt).toLocaleString("en-IN") %>
+      </small>
+
+      <form action="/admin/contacts/<%= contact._id %>?_method=DELETE" method="POST">
+        <button class="btn btn-danger btn-sm px-3">
+          <i class="fa-solid fa-trash"></i>
+        </button>
+      </form>
+    </div>
+   </div>
+  </div>
+</div>
+    <% }) %>
+  </div>
+</div>

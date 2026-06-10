@@ -1,0 +1,71 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="booking-success-page">
+  <div class="booking-success-card">
+
+    <div class="success-icon-wrap text-center mb-4">
+      <div class="success-icon-circle d-inline-flex align-items-center justify-content-center rounded-circle bg-success text-white" style="width:80px; height:80px; font-size:2rem;">
+        <i class="fa-solid fa-check"></i>
+      </div>
+    </div>
+
+    <h1 class="success-title text-center">Booking Confirmed!</h1>
+    <p class="success-subtitle text-center text-muted mb-4">
+      Your payment was successful and your educational tour booking has been confirmed.
+    </p>
+
+    <div class="booking-summary-box card shadow-sm border-0 rounded-4 p-4">
+      <h4 class="mb-4">Booking Summary</h4>
+
+      <div class="summary-row d-flex justify-content-between mb-2">
+        <span>Tour</span>
+        <strong><%= booking.listing && booking.listing.title ? booking.listing.title : "Tour" %></strong>
+      </div>
+
+      <div class="summary-row d-flex justify-content-between mb-2">
+        <span>Location</span>
+        <strong>
+          <%= booking.listing && booking.listing.location ? booking.listing.location : "-" %>
+        </strong>
+      </div>
+
+      <div class="summary-row d-flex justify-content-between mb-2">
+        <span>Duration</span>
+        <strong>
+          <%= booking.listing && booking.listing.duration ? booking.listing.duration : "-" %>
+        </strong>
+      </div>
+
+      <div class="summary-row d-flex justify-content-between mb-2">
+        <span>Departure / Batch</span>
+        <strong><%= booking.departure || "To be confirmed" %></strong>
+      </div>
+
+      <div class="summary-row d-flex justify-content-between mb-2">
+        <span>Students</span>
+        <strong><%= booking.students || 1 %></strong>
+      </div>
+
+      <div class="summary-row d-flex justify-content-between mb-2">
+        <span>Total Paid</span>
+        <strong>₹ <%= Number(booking.totalPrice || 0).toLocaleString("en-IN") %></strong>
+      </div>
+
+      <div class="summary-row d-flex justify-content-between mb-2">
+        <span>Payment ID</span>
+        <strong><%= booking.paymentId || "N/A" %></strong>
+      </div>
+
+      <div class="summary-row d-flex justify-content-between mb-0">
+        <span>Status</span>
+        <strong class="text-success text-capitalize"><%= booking.status || "confirmed" %></strong>
+      </div>
+    </div>
+
+    <div class="success-actions d-flex gap-3 justify-content-center mt-4">
+      <a href="/bookings/my" class="btn btn-dark px-4 rounded-pill">My Bookings</a>
+      <a href="/listings" class="btn btn-outline-dark px-4 rounded-pill">Explore More Tours</a>
+    </div>
+
+  </div>
+</div>

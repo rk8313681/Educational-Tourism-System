@@ -1,0 +1,244 @@
+<% layout("/layouts/boilerplate") %>
+
+<!-- CONTACT HERO -->
+<section class="page-hero contact-hero-bg">
+  <div class="hero-overlay"></div>
+
+  <div class="container hero-content text-center">
+    <h1>
+  <span id="contactTypingText"></span>
+</h1>
+   <p class="contact-hero-subtitle">
+      Plan your next educational tour with ease. Contact us for
+      booking assistance, and student travel support.
+    </p>
+  </div>
+</section>
+
+<!-- CONTACT CARDS -->
+<section class="contact-cards-section">
+  <div class="container">
+    <div class="row g-4">
+
+      <div class="col-md-6 col-lg-3">
+        <div class="contact-card contact-slide-left">
+          <i class="fa-solid fa-envelope"></i>
+          <h5>Email</h5>
+          <p>info@educationaltourism.com</p>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-3">
+        <div class="contact-card contact-slide-right">
+          <i class="fa-solid fa-phone"></i>
+          <h5>Phone</h5>
+          <p>+91 9695959664</p>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-3">
+        <div class="contact-card contact-slide-left">
+          <i class="fa-solid fa-clock"></i>
+          <h5>Office Hours</h5>
+          <p>Mon - Sat, 9 AM - 6 PM</p>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-3">
+        <div class="contact-card contact-slide-right">
+          <i class="fa-solid fa-location-dot"></i>
+          <h5>Location</h5>
+          <p>India,Bhopal(MP nagar)</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FORM SECTION -->
+<section class="contact-form-section">
+  <div class="container">
+    <div class="row g-5">
+
+      <!-- FORM -->
+      <div class="col-lg-7">
+        <div class="contact-form-card">
+          <h3>Send Inquiry</h3>
+           <% if (success && success.length > 0) { %>
+  <div class="alert alert-success">
+    <%= success[0] %>
+  </div>
+<% } %>
+
+<% if (error && error.length > 0) { %>
+  <div class="alert alert-danger">
+    <%= error[0] %>
+  </div>
+<% } %>
+           <form action="/contact" method="POST" id="contactForm">
+            <div class="row g-3">
+
+              <div class="col-md-6">
+                <input type="text" name="fullName" class="form-control" placeholder="Full Name" required>
+              </div>
+
+              <div class="col-md-6">
+               <input type="email" name="email" class="form-control" placeholder="Email" required>
+              </div>
+
+              <div class="col-md-6">
+                <input type="text" name="phone" class="form-control" placeholder="Phone" required>
+              </div>
+
+              <div class="col-md-6">
+                <input type="text" name="institution" class="form-control" placeholder="College / Institution">
+              </div>
+
+              <div class="col-12">
+                <input
+  type="text"
+  name="subject"
+  class="form-control"
+  placeholder="Subject"
+  value="<%= query && query.subject ? query.subject : '' %>"
+>
+              </div>
+
+              <div class="col-12">
+                <textarea name="message" class="form-control" rows="5" placeholder="Your Message" required></textarea>
+              </div>
+
+              <div class="col-12">
+                <% if (!currUser) { %>
+  <a href="/login" class="btn contact-btn">Send Message</a>
+<% } else { %>
+  <button type="submit" class="btn contact-btn" id="submitBtn">Send Message</button>
+<% } %>
+              </div>
+
+            </div>
+          </form>
+
+        </div>
+      </div>
+
+      <!-- SIDE INFO -->
+      <div class="col-lg-5">
+        <div class="contact-side">
+          <h3>Why Contact Us?</h3>
+
+         <div class="contact-point why-point-animate">
+            <i class="fa-solid fa-circle-check"></i>
+            <span>Custom educational tour planning</span>
+          </div>
+
+         <div class="contact-point why-point-animate">
+            <i class="fa-solid fa-circle-check"></i>
+            <span>Group booking assistance</span>
+          </div>
+
+          <div class="contact-point why-point-animate">
+            <i class="fa-solid fa-circle-check"></i>
+            <span>Transport, meals & stay support</span>
+          </div>
+
+          <div class="contact-point why-point-animate">
+            <i class="fa-solid fa-circle-check"></i>
+            <span>Easy coordination with institutions</span>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="contact-cta contact-reveal">
+  <div class="container text-center">
+    <h2>Plan Your Educational Tour Today</h2>
+    <p>Explore packages and create meaningful learning experiences for students.</p>
+    <a href="/listings" class="btn contact-btn">Explore Tours</a>
+  </div>
+</section>
+<script>
+  const contactForm = document.getElementById("contactForm");
+  const submitBtn = document.getElementById("submitBtn");
+  const alertBox = document.querySelector(".alert");
+
+  if (contactForm && submitBtn) {
+    contactForm.addEventListener("submit", function () {
+      submitBtn.innerText = "Sending...";
+      submitBtn.disabled = true;
+    });
+  }
+
+  if (alertBox) {
+    alertBox.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+</script>
+<script>
+  const contactTypingText = document.getElementById("contactTypingText");
+  const contactHeroText = "Get in Touch With Us";
+  let contactIndex = 0;
+
+  function typeContactHero() {
+    if (!contactTypingText) return;
+
+    if (contactIndex < contactHeroText.length) {
+      contactTypingText.textContent += contactHeroText.charAt(contactIndex);
+      contactIndex++;
+      setTimeout(typeContactHero, 55);
+    }
+  }
+
+  window.addEventListener("load", typeContactHero);
+
+  window.addEventListener("scroll", () => {
+    const hero = document.querySelector(".contact-hero-bg");
+    if (!hero) return;
+
+    hero.style.backgroundPosition = `center ${window.scrollY * 0.25}px`;
+  });
+</script>
+<script>
+  const contactRevealItems = document.querySelectorAll(".contact-reveal");
+
+  function revealContactItems() {
+    const windowHeight = window.innerHeight;
+
+    contactRevealItems.forEach((item) => {
+      const top = item.getBoundingClientRect().top;
+
+      if (top < windowHeight - 100) {
+        item.classList.add("active");
+      }
+    });
+  }
+
+  window.addEventListener("scroll", revealContactItems);
+  window.addEventListener("load", revealContactItems);
+</script>
+<script>
+  const contactAnimItems = document.querySelectorAll(
+    ".contact-slide-left, .contact-slide-right, .why-point-animate"
+  );
+
+  function runContactAnimations() {
+    const windowHeight = window.innerHeight;
+
+    contactAnimItems.forEach((item, index) => {
+      const top = item.getBoundingClientRect().top;
+
+      if (top < windowHeight - 100) {
+        item.style.transitionDelay = `${index * 0.08}s`;
+        item.classList.add("active");
+      }
+    });
+  }
+
+  window.addEventListener("scroll", runContactAnimations);
+  window.addEventListener("load", runContactAnimations);
+</script>

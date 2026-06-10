@@ -1,0 +1,108 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="auth-page">
+  <div class="auth-card">
+
+    <div class="auth-left signup-bg">
+      <div class="auth-overlay"></div>
+      <div class="auth-left-content">
+        <div class="auth-brand-mini">
+          <i class="fa-solid fa-graduation-cap"></i>
+          <span>Educational Tourism</span>
+        </div>
+
+        <span class="auth-tag">Educational Tourism</span>
+        <h2>Join Educational Tourism</h2>
+        <p>
+          Create your account and start exploring educational tours,
+          campus visits, industrial trips, and more.
+        </p>
+      </div>
+    </div>
+
+    <div class="auth-right">
+      <h1>Create Account</h1>
+      <p class="auth-subtext">Sign up to continue your journey</p>
+<a href="/auth/google" class="auth-btn google-auth-btn">
+  <i class="fa-brands fa-google"></i>
+  Continue with Google
+</a>
+
+<div class="auth-divider">
+  <span>OR</span>
+</div>
+      <form action="/signup" method="POST" class="auth-form" onsubmit="return validateSignupForm()">
+        <div class="auth-group">
+          <label for="username">Username</label>
+          <input type="text" id="username" name="username" placeholder="Enter username" required>
+        </div>
+
+        <div class="auth-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" placeholder="Enter email" required>
+        </div>
+
+        <div class="auth-group">
+          <label for="password">Password</label>
+          <div class="password-field">
+            <input type="password" id="password" name="password" placeholder="Enter password" required>
+            <button type="button" class="password-toggle" onclick="togglePassword('password', this)">
+              <i class="fa-solid fa-eye"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="auth-group">
+          <label for="confirmPassword">Confirm Password</label>
+          <div class="password-field">
+            <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm password" required>
+            <button type="button" class="password-toggle" onclick="togglePassword('confirmPassword', this)">
+              <i class="fa-solid fa-eye"></i>
+            </button>
+          </div>
+        </div>
+
+        <p id="passwordError" class="auth-error-text"></p>
+
+        <button class="auth-btn" type="submit">Create Account</button>
+      </form>
+
+      <p class="auth-switch">
+        Already have an account?
+        <a href="/login">Login</a>
+      </p>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  function togglePassword(fieldId, btn) {
+    const input = document.getElementById(fieldId);
+    const icon = btn.querySelector("i");
+
+    if (input.type === "password") {
+      input.type = "text";
+      icon.classList.remove("fa-eye");
+      icon.classList.add("fa-eye-slash");
+    } else {
+      input.type = "password";
+      icon.classList.remove("fa-eye-slash");
+      icon.classList.add("fa-eye");
+    }
+  }
+
+  function validateSignupForm() {
+    const password = document.getElementById("password").value;
+    const confirmPassword = document.getElementById("confirmPassword").value;
+    const errorEl = document.getElementById("passwordError");
+
+    if (password !== confirmPassword) {
+      errorEl.innerText = "Passwords do not match.";
+      return false;
+    }
+
+    errorEl.innerText = "";
+    return true;
+  }
+</script>

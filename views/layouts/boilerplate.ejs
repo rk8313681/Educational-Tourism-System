@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Wanderlust Tours</title>  
+  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/854/854878.png">
+  <!-- Bootstrap + FontAwesome -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<!-- Flatpickr CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+<!-- Flatpickr JS -->
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <!-- Custom CSS -->
+  <link href="/css/style.css" rel="stylesheet">
+</head>
+<body>
+  <div class="toast-container">
+
+  <% if(success && success.length) { %>
+    <div class="success-toast">
+      <i class="fa-solid fa-circle-check"></i>
+      <span><%= success[0] %></span>
+      <button onclick="this.parentElement.remove()">×</button>
+    </div>
+  <% } %>
+
+  <% if(error && error.length) { %>
+    <div class="error-toast">
+      <i class="fa-solid fa-circle-xmark"></i>
+      <span><%= error[0] %></span>
+      <button onclick="this.parentElement.remove()">×</button>
+    </div>
+  <% } %>
+
+</div>
+<!-- PREMIUM NAVBAR -->
+<header class="top-contact-bar">
+  <div class="container d-flex justify-content-end align-items-center h-100">
+    <div class="contact-info">
+      <span class="me-4"><i class="fa-solid fa-envelope me-2"></i>info@educationaltourism.com</span>
+      <span><i class="fa-solid fa-phone me-2"></i>+91 9695959664</span>
+    </div>
+  </div>
+</header>
+
+<nav class="navbar navbar-expand-lg">
+  <div class="container-wrapper">
+
+    <a class="navbar-brand custom-brand" href="/listings">
+      <div class="brand-logo-box">
+        <i class="fa-solid fa-graduation-cap"></i>
+      </div>
+      <div class="brand-text">
+        <span class="brand-title">EDUCATIONAL</span>
+        <span class="brand-subtitle">TOURISM</span>
+      </div>
+    </a>
+
+    <button class="navbar-toggler custom-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="mainNavbar">
+      <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" href="/listings">HOME</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="/about">ABOUT</a>
+        </li>
+
+<li class="nav-item dropdown">
+  <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+    GROUP TOURS
+  </a>
+
+  <ul class="dropdown-menu shadow rounded-3 p-2">
+    <li>
+      <a class="dropdown-item <%= (query.category === 'college') ? 'active' : '' %>" 
+         href="/listings?category=college">
+        <i class="fa-solid fa-building-columns me-2"></i> College Campus Tours
+      </a>
+    </li>
+
+    <li>
+      <a class="dropdown-item <%= (query.category === 'industrial') ? 'active' : '' %>" 
+         href="/listings?category=industrial">
+        <i class="fa-solid fa-industry me-2"></i> Industrial Visits
+      </a>
+    </li>
+
+    <li><hr class="dropdown-divider"></li>
+
+    <li>
+      <a class="dropdown-item <%= (query.category === 'science') ? 'active' : '' %>" 
+         href="/listings?category=science">
+        <i class="fa-solid fa-flask me-2"></i> Science & Research Tours
+      </a>
+    </li>
+
+    <li>
+      <a class="dropdown-item <%= (query.category === 'government') ? 'active' : '' %>" 
+         href="/listings?category=government">
+        <i class="fa-solid fa-landmark me-2"></i> Government Institution Visits
+      </a>
+    </li>
+
+    <li>
+      <a class="dropdown-item <%= (query.category === 'career') ? 'active' : '' %>" 
+         href="/listings?category=career">
+        <i class="fa-solid fa-briefcase me-2"></i> Career Exposure Tours
+      </a>
+    </li>
+  </ul>
+</li>
+
+        <li class="nav-item dropdown">
+  <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+    EDUCATIONAL EVENTS
+  </a>
+
+  <ul class="dropdown-menu shadow rounded-3 p-2">
+    <li>
+      <a class="dropdown-item" href="/events?type=government">
+        <i class="fa-solid fa-globe me-2"></i> G20 / Government Events
+      </a>
+    </li>
+
+    <li>
+      <a class="dropdown-item" href="/events?type=science">
+        <i class="fa-solid fa-flask me-2"></i> Science Exhibitions
+      </a>
+    </li>
+
+    <li>
+      <a class="dropdown-item" href="/events?type=techfest">
+        <i class="fa-solid fa-robot me-2"></i> Tech Fests & Robotics
+      </a>
+    </li>
+
+    <li>
+      <a class="dropdown-item" href="/events?type=hackathon">
+        <i class="fa-solid fa-laptop-code me-2"></i> Hackathons
+      </a>
+    </li>
+
+  </ul>
+</li>
+
+<li class="nav-item">
+  <a class="nav-link" href="/listings/safety">SAFETY</a>
+</li>
+
+<li class="nav-item">
+  <a class="nav-link" href="/contact">CONTACT</a>
+</li>
+
+      <ul class="navbar-nav align-items-lg-center auth-links">
+        </ul>
+
+  <% if(!currUser) { %>
+
+    <!-- GUEST -->
+    <li class="nav-item">
+      <a class="nav-link" href="/login">Login</a>
+    </li>
+
+    <li class="nav-item ms-lg-2">
+      <a class="btn btn-danger signup-btn" href="/signup">Sign Up</a>
+    </li>
+
+ <% } else if (currUser && currUser.role === "admin") { %>
+
+  <li class="nav-item">
+    <a class="nav-link fw-bold text-warning" href="/admin">
+      <i class="fa-solid fa-user-shield"></i> Admin Panel
+    </a>
+  </li>
+
+  <li class="nav-item">
+    <a class="nav-link" href="/logout">Logout</a>
+  </li>
+
+  <li class="nav-item ms-lg-2">
+    <span class="badge bg-dark welcome-badge">
+      👑 Admin: <%= currUser.username %>
+    </span>
+  </li>
+
+<% } else { %>
+
+  <li class="nav-item dropdown ms-lg-2">
+<a class="profile-btn dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+  <%= currUser.username.charAt(0).toUpperCase() %>
+</a>
+
+<ul class="dropdown-menu dropdown-menu-end profile-dropdown">
+
+  <li class="px-3 py-2">
+    <strong><%= currUser.username %></strong><br>
+    <small class="text-muted"><%= currUser.email %></small>
+  </li>
+  <li><hr class="dropdown-divider"></li>
+
+  <li><a class="dropdown-item" href="/profile">👤 My Profile</a></li>
+  <li><a class="dropdown-item" href="/bookings/my">📦 My Bookings</a></li>
+
+  <% if(currUser.role === "admin") { %>
+    <li><a class="dropdown-item" href="/admin">⚙️ Admin Panel</a></li>
+  <% } %>
+
+  <li><hr class="dropdown-divider"></li>
+  <li><a class="dropdown-item text-danger" href="/logout">🚪 Logout</a></li>
+
+</ul>
+</li>
+
+<% } %>
+<li class="nav-item ms-lg-2">
+</li>
+</ul>
+    </div>
+
+  </div>
+</nav>
+  <!-- MAIN CONTENT -->
+  <%- body %>
+
+  <!-- FOOTER -->
+  <%- include("../includes/footer.ejs") %>
+
+  <script>
+  setTimeout(() => {
+   document.querySelectorAll(".success-toast, .error-toast").forEach(toast => {
+  toast.style.opacity = "0";
+  toast.style.transform = "translateX(100%)";
+  setTimeout(() => toast.remove(), 400);
+});(toast => {
+      toast.style.opacity = "0";
+      toast.style.transform = "translateX(100%)";
+      setTimeout(() => toast.remove(), 400);
+    });
+  }, 3000);
+</script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<% layout("/layouts/admin") %>
+
+<div class="admin-panel-card">
+  <div class="panel-header">
+    <h4>Manage Tours</h4>
+    <a href="/listings/new" class="admin-primary-btn">Add Tour</a>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table admin-table">
+      <thead>
+        <tr>
+          <th>Image</th>
+          <th>Title</th>
+          <th>Location</th>
+          <th>Price</th>
+          <th>Owner</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (listings.length > 0) { %>
+          <% listings.forEach(listing => { %>
+            <tr>
+              <td>
+                <img 
+                  src="<%= listing.image?.url || 'https://via.placeholder.com/80' %>" 
+                  alt="tour" 
+                  style="width:70px; height:50px; object-fit:cover; border-radius:8px;"
+                >
+              </td>
+              <td><%= listing.title %></td>
+              <td><%= listing.location %></td>
+              <td>₹ <%= Number(listing.price || 0).toLocaleString("en-IN") %></td>
+              <td><%= listing.owner?.username || "N/A" %></td>
+              <td>
+                <a href="/listings/<%= listing._id %>" class="table-action edit">View</a>
+                <a href="/listings/<%= listing._id %>/edit" class="table-action edit">Edit</a>
+                <form action="/admin/listings/<%= listing._id %>?_method=DELETE" method="POST" style="display:inline;">
+                  <button type="submit" class="table-action delete" style="border:none; background:none;">Delete</button>
+                </form>
+              </td>
+            </tr>
+          <% }) %>
+        <% } else { %>
+          <tr>
+            <td colspan="6" class="text-center">No tours found</td>
+          </tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+</div>

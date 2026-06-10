@@ -1,0 +1,349 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="row mt-4 mb-5">
+  <div class="col-lg-10 offset-lg-1">
+    <h3 class="mb-4">Edit Educational Tour Package</h3>
+
+    <form method="POST" action="/listings/<%= listing._id %>?_method=PUT" novalidate class="needs-validation" enctype="multipart/form-data">
+
+      <div class="card shadow-sm border-0 rounded-4 p-4 mb-4">
+        <h4 class="mb-3">Basic Details</h4>
+
+        <div class="mb-3">
+          <label class="form-label">Package Title</label>
+          <input name="listing[title]" value="<%= listing.title || '' %>" type="text" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Description</label>
+          <textarea name="listing[description]" class="form-control" rows="4" required><%= listing.description || '' %></textarea>
+        </div>
+
+        <div class="row">
+          <div class="mb-3 col-md-4">
+            <label class="form-label">Duration</label>
+            <input name="listing[duration]" value="<%= listing.duration || '' %>" type="text" class="form-control">
+          </div>
+
+          <div class="mb-3 col-md-4">
+            <label class="form-label">Price Per Person</label>
+            <input name="listing[pricePerPerson]" value="<%= listing.pricePerPerson || 0 %>" type="number" class="form-control" min="0">
+          </div>
+
+          <div class="mb-3 col-md-4">
+            <label class="form-label">Base Price</label>
+            <input name="listing[price]" value="<%= listing.price || 0 %>" type="number" class="form-control" min="0" required>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="mb-3 col-md-4">
+            <label class="form-label">Tour Code</label>
+            <input name="listing[tourCode]" value="<%= listing.tourCode || '' %>" type="text" class="form-control">
+          </div>
+
+          <div class="mb-3 col-md-4">
+            <label class="form-label">Starting Point</label>
+            <input name="listing[startingPoint]" value="<%= listing.startingPoint || '' %>" type="text" class="form-control">
+          </div>
+
+          <div class="mb-3 col-md-4">
+            <label class="form-label">Availability</label>
+            <select name="listing[availability]" class="form-select">
+              <option value="available" <%= listing.availability === "available" ? "selected" : "" %>>Available</option>
+              <option value="on-request" <%= listing.availability === "on-request" ? "selected" : "" %>>On Request</option>
+              <option value="sold-out" <%= listing.availability === "sold-out" ? "selected" : "" %>>Sold Out</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="mb-3 col-md-4">
+            <label class="form-label">Package Type</label>
+            <input name="listing[packageType]" value="<%= listing.packageType || '' %>" type="text" class="form-control">
+          </div>
+
+          <div class="mb-3 col-md-4">
+            <label class="form-label">Category</label>
+            <input name="listing[category]" value="<%= listing.category || 'Educational Tour' %>" type="text" class="form-control">
+          </div>
+
+          <div class="mb-3 col-md-4">
+            <label class="form-label">Country</label>
+            <input name="listing[country]" value="<%= listing.country || 'India' %>" type="text" class="form-control" required>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Location</label>
+          <input name="listing[location]" value="<%= listing.location || '' %>" type="text" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">About Location</label>
+          <textarea name="listing[aboutLocation]" class="form-control" rows="3"><%= listing.aboutLocation || '' %></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Original Listing Image</label><br>
+          <img src="<%= originalImageUrl %>" class="img-thumbnail" style="width:250px;">
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Upload New Image</label>
+          <input name="listing[image]" type="file" class="form-control">
+        </div>
+      </div>
+
+      <div class="card shadow-sm border-0 rounded-4 p-4 mb-4">
+        <h4 class="mb-3">Package Includes</h4>
+
+        <div class="row">
+          <div class="col-md-3 mb-2"><label><input type="checkbox" name="listing[mealsIncluded]" <%= listing.mealsIncluded ? "checked" : "" %>> Meals Included</label></div>
+          <div class="col-md-3 mb-2"><label><input type="checkbox" name="listing[sightseeingIncluded]" <%= listing.sightseeingIncluded ? "checked" : "" %>> Sightseeing Included</label></div>
+          <div class="col-md-3 mb-2"><label><input type="checkbox" name="listing[hotelIncluded]" <%= listing.hotelIncluded ? "checked" : "" %>> Hotel Included</label></div>
+          <div class="col-md-3 mb-2"><label><input type="checkbox" name="listing[transportIncluded]" <%= listing.transportIncluded ? "checked" : "" %>> Transport Included</label></div>
+        </div>
+      </div>
+
+      <div class="card shadow-sm border-0 rounded-4 p-4 mb-4">
+        <h4 class="mb-3">Hotel Details</h4>
+
+        <div class="row">
+          <div class="mb-3 col-md-6">
+            <label class="form-label">Hotel Name</label>
+            <input name="listing[hotel][hotelName]" value="<%= listing.hotel && listing.hotel.hotelName ? listing.hotel.hotelName : '' %>" type="text" class="form-control">
+          </div>
+
+          <div class="mb-3 col-md-6">
+            <label class="form-label">Room Type</label>
+            <input name="listing[hotel][roomType]" value="<%= listing.hotel && listing.hotel.roomType ? listing.hotel.roomType : '' %>" type="text" class="form-control">
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="mb-3 col-md-4">
+            <label class="form-label">Nights</label>
+            <input name="listing[hotel][nights]" value="<%= listing.hotel && listing.hotel.nights ? listing.hotel.nights : 0 %>" type="number" class="form-control" min="0">
+          </div>
+
+          <div class="mb-3 col-md-8">
+            <label class="form-label">Hotel Address</label>
+            <input name="listing[hotel][hotelAddress]" value="<%= listing.hotel && listing.hotel.hotelAddress ? listing.hotel.hotelAddress : '' %>" type="text" class="form-control">
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Stay Notes</label>
+          <textarea name="listing[hotel][stayNotes]" class="form-control" rows="2"><%= listing.hotel && listing.hotel.stayNotes ? listing.hotel.stayNotes : '' %></textarea>
+        </div>
+      </div>
+
+      <div class="card shadow-sm border-0 rounded-4 p-4 mb-4">
+        <h4 class="mb-3">Meals Details</h4>
+
+        <div class="row mb-3">
+          <div class="col-md-3"><label><input type="checkbox" name="listing[meals][breakfast]" <%= listing.meals && listing.meals.breakfast ? "checked" : "" %>> Breakfast</label></div>
+          <div class="col-md-3"><label><input type="checkbox" name="listing[meals][lunch]" <%= listing.meals && listing.meals.lunch ? "checked" : "" %>> Lunch</label></div>
+          <div class="col-md-3"><label><input type="checkbox" name="listing[meals][dinner]" <%= listing.meals && listing.meals.dinner ? "checked" : "" %>> Dinner</label></div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Meal Plan</label>
+          <input name="listing[meals][mealPlan]" value="<%= listing.meals && listing.meals.mealPlan ? listing.meals.mealPlan : '' %>" type="text" class="form-control">
+        </div>
+      </div>
+
+      <div class="card shadow-sm border-0 rounded-4 p-4 mb-4">
+        <h4 class="mb-3">Transport Details</h4>
+
+        <div class="row">
+          <div class="mb-3 col-md-4">
+            <label class="form-label">Transport Type</label>
+            <select name="listing[transport][type]" class="form-select">
+              <option value="" <%= !listing.transport || !listing.transport.type ? "selected" : "" %>>Select</option>
+              <option value="bus" <%= listing.transport && listing.transport.type === "bus" ? "selected" : "" %>>Bus</option>
+              <option value="car" <%= listing.transport && listing.transport.type === "car" ? "selected" : "" %>>Car</option>
+            </select>
+          </div>
+
+          <div class="mb-3 col-md-4">
+            <label class="form-label">Vehicle Name</label>
+            <input name="listing[transport][vehicleName]" value="<%= listing.transport && listing.transport.vehicleName ? listing.transport.vehicleName : '' %>" type="text" class="form-control">
+          </div>
+
+          <div class="mb-3 col-md-4">
+            <label class="form-label">Capacity</label>
+            <input name="listing[transport][capacity]" value="<%= listing.transport && listing.transport.capacity ? listing.transport.capacity : 0 %>" type="number" class="form-control" min="0">
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="mb-3 col-md-6">
+            <label class="form-label">Pickup Point</label>
+            <input name="listing[transport][pickupPoint]" value="<%= listing.transport && listing.transport.pickupPoint ? listing.transport.pickupPoint : '' %>" type="text" class="form-control">
+          </div>
+
+          <div class="mb-3 col-md-6">
+            <label class="form-label">Drop Point</label>
+            <input name="listing[transport][dropPoint]" value="<%= listing.transport && listing.transport.dropPoint ? listing.transport.dropPoint : '' %>" type="text" class="form-control">
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-3 mb-2"><label><input type="checkbox" name="listing[transport][driverIncluded]" <%= listing.transport && listing.transport.driverIncluded ? "checked" : "" %>> Driver Included</label></div>
+          <div class="col-md-3 mb-2"><label><input type="checkbox" name="listing[transport][fuelIncluded]" <%= listing.transport && listing.transport.fuelIncluded ? "checked" : "" %>> Fuel Included</label></div>
+        </div>
+      </div>
+
+      <div class="card shadow-sm border-0 rounded-4 p-4 mb-4">
+        <h4 class="mb-3">Departure Batches</h4>
+
+        <% for (let i = 0; i < 2; i++) { 
+          let batch = listing.departureBatches && listing.departureBatches[i] ? listing.departureBatches[i] : {};
+        %>
+          <div class="row">
+            <div class="mb-3 col-md-6">
+              <label class="form-label">Batch <%= i + 1 %> Date</label>
+              <input name="listing[departureBatches][<%= i %>][date]" value="<%= batch.date || '' %>" type="text" class="form-control">
+            </div>
+
+            <div class="mb-3 col-md-6">
+              <label class="form-label">Seats</label>
+              <input name="listing[departureBatches][<%= i %>][seats]" value="<%= batch.seats || '' %>" type="number" class="form-control">
+            </div>
+          </div>
+        <% } %>
+      </div>
+
+      <div class="card shadow-sm border-0 rounded-4 p-4 mb-4">
+        <h4 class="mb-3">Package Sections</h4>
+
+        <div class="mb-3">
+          <label class="form-label">Nearby Places</label>
+          <textarea name="listing[nearbyPlaces]" class="form-control" rows="2"><%= listing.nearbyPlaces && listing.nearbyPlaces.length ? listing.nearbyPlaces.join(", ") : "" %></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Inclusions</label>
+          <textarea name="listing[inclusions]" class="form-control" rows="2"><%= listing.inclusions && listing.inclusions.length ? listing.inclusions.join(", ") : "" %></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Exclusions</label>
+          <textarea name="listing[exclusions]" class="form-control" rows="2"><%= listing.exclusions && listing.exclusions.length ? listing.exclusions.join(", ") : "" %></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Tour Highlights</label>
+          <textarea name="listing[tourHighlights]" class="form-control" rows="2"><%= listing.tourHighlights && listing.tourHighlights.length ? listing.tourHighlights.join(", ") : "" %></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Package Policy</label>
+          <textarea name="listing[packagePolicy]" class="form-control" rows="2"><%= listing.packagePolicy && listing.packagePolicy.length ? listing.packagePolicy.join(", ") : "" %></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Cancellation Policy</label>
+          <textarea name="listing[cancellationPolicy]" class="form-control" rows="2"><%= listing.cancellationPolicy && listing.cancellationPolicy.length ? listing.cancellationPolicy.join(", ") : "" %></textarea>
+        </div>
+      </div>
+
+      <div class="card shadow-sm border-0 rounded-4 p-4 mb-4">
+        <h4 class="mb-3">Tour Itinerary</h4>
+
+        <% for (let i = 0; i < 2; i++) { 
+          let day = listing.itinerary && listing.itinerary[i] ? listing.itinerary[i] : {};
+          let dayTransport = day.transport || {};
+        %>
+          <div class="border rounded-4 p-3 mb-4">
+            <h5>Day <%= i + 1 %></h5>
+
+            <div class="row">
+              <div class="mb-3 col-md-2">
+                <label class="form-label">Day</label>
+                <input name="listing[itinerary][<%= i %>][day]" type="number" class="form-control" value="<%= day.day || (i + 1) %>">
+              </div>
+
+              <div class="mb-3 col-md-5">
+                <label class="form-label">Title</label>
+                <input name="listing[itinerary][<%= i %>][title]" type="text" class="form-control" value="<%= day.title || '' %>">
+              </div>
+
+              <div class="mb-3">
+  <label class="form-label">Tour Category</label>
+  <select name="listing[category]" class="form-control" required>
+    <option value="school" <%= listing.category === "school" ? "selected" : "" %>>School Educational Tours</option>
+    <option value="college" <%= listing.category === "college" ? "selected" : "" %>>College Campus Tours</option>
+    <option value="industrial" <%= listing.category === "industrial" ? "selected" : "" %>>Industrial Visits</option>
+    <option value="science" <%= listing.category === "science" ? "selected" : "" %>>Science & Research Tours</option>
+    <option value="government" <%= listing.category === "government" ? "selected" : "" %>>Government Institution Visits</option>
+    <option value="career" <%= listing.category === "career" ? "selected" : "" %>>Career Exposure Tours</option>
+  </select>
+</div>
+
+              <div class="mb-3 col-md-5">
+                <label class="form-label">Subtitle</label>
+                <input name="listing[itinerary][<%= i %>][subtitle]" type="text" class="form-control" value="<%= day.subtitle || '' %>">
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Description</label>
+              <textarea name="listing[itinerary][<%= i %>][description]" class="form-control" rows="2"><%= day.description || '' %></textarea>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Stay</label>
+              <input name="listing[itinerary][<%= i %>][stay]" type="text" class="form-control" value="<%= day.stay || '' %>">
+            </div>
+
+            <div class="row">
+              <div class="mb-3 col-md-3">
+                <label class="form-label">From</label>
+                <input name="listing[itinerary][<%= i %>][transport][from]" type="text" class="form-control" value="<%= dayTransport.from || '' %>">
+              </div>
+
+              <div class="mb-3 col-md-3">
+                <label class="form-label">To</label>
+                <input name="listing[itinerary][<%= i %>][transport][to]" type="text" class="form-control" value="<%= dayTransport.to || '' %>">
+              </div>
+
+              <div class="mb-3 col-md-2">
+                <label class="form-label">Mode</label>
+                <select name="listing[itinerary][<%= i %>][transport][mode]" class="form-select">
+                  <option value="" <%= !dayTransport.mode ? "selected" : "" %>>Select</option>
+                  <option value="bus" <%= dayTransport.mode === "bus" ? "selected" : "" %>>Bus</option>
+                  <option value="car" <%= dayTransport.mode === "car" ? "selected" : "" %>>Car</option>
+                </select>
+              </div>
+
+              <div class="mb-3 col-md-2">
+                <label class="form-label">Distance</label>
+                <input name="listing[itinerary][<%= i %>][transport][distance]" type="text" class="form-control" value="<%= dayTransport.distance || '' %>">
+              </div>
+
+              <div class="mb-3 col-md-2">
+                <label class="form-label">Time</label>
+                <input name="listing[itinerary][<%= i %>][transport][time]" type="text" class="form-control" value="<%= dayTransport.time || '' %>">
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Meals (comma separated)</label>
+              <input name="listing[itinerary][<%= i %>][meals]" type="text" class="form-control" value="<%= day.meals && day.meals.length ? day.meals.join(', ') : '' %>">
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Activities (comma separated)</label>
+              <input name="listing[itinerary][<%= i %>][activities]" type="text" class="form-control" value="<%= day.activities && day.activities.length ? day.activities.join(', ') : '' %>">
+            </div>
+          </div>
+        <% } %>
+      </div>
+
+      <button class="btn btn-dark edit-btn mt-3">Update Package</button>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,49 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="container mt-5 mb-5">
+  <div class="card shadow-lg border-0 rounded-4 p-4 mx-auto" style="max-width: 650px;">
+    <h2 class="fw-bold mb-3">Complete Your Payment</h2>
+
+    <p><strong>Booking ID:</strong> <%= booking._id %></p>
+    <p><strong>Total Amount:</strong> ₹ <%= Number(booking.totalPrice || 0).toLocaleString("en-IN") %></p>
+    <p><strong>Status:</strong> <%= booking.status %></p>
+
+    <button id="rzp-button" class="btn btn-danger btn-lg w-100 mt-3">
+      Pay Now
+    </button>
+  </div>
+</div>
+
+<form id="paymentVerifyForm" action="/bookings/verify-payment" method="POST" style="display:none;">
+  <input type="hidden" name="razorpay_payment_id" id="razorpay_payment_id">
+  <input type="hidden" name="razorpay_order_id" id="razorpay_order_id">
+  <input type="hidden" name="bookingId" value="<%= booking._id %>">
+</form>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<script>
+  const options = {
+    key: "<%= razorpayKey %>",
+    amount: "<%= order.amount %>",
+    currency: "INR",
+    name: "Educational Tourism",
+    description: "Tour Booking Payment",
+    order_id: "<%= order.id %>",
+    handler: function (response) {
+      document.getElementById("razorpay_payment_id").value = response.razorpay_payment_id;
+      document.getElementById("razorpay_order_id").value = response.razorpay_order_id;
+      document.getElementById("paymentVerifyForm").submit();
+    },
+    theme: {
+      color: "#9a825c"
+    }
+  };
+
+  const rzp = new Razorpay(options);
+
+  document.getElementById("rzp-button").onclick = function (e) {
+    rzp.open();
+    e.preventDefault();
+  };
+</script>

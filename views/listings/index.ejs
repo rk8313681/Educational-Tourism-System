@@ -1,0 +1,525 @@
+<% layout("/layouts/boilerplate") %>
+
+<section class="hero">
+  <div class="hero-overlay"></div>
+
+  <div class="hero-inner">
+    <div class="hero-content text-center text-white">
+     <h1 class="hero-title hero-animate delay-1">
+  <span id="typingText"></span>
+</h1>
+     <p class="hero-subtitle hero-animate delay-2">Campus Visits • Industry Exposure • Parliament Tours • Science & Innovation Trips</p>
+
+<form action="/listings" method="GET" class="hero-search-bar">
+  <i class="fa-solid fa-magnifying-glass search-icon"></i>
+
+<input
+  type="text"
+  name="search"
+  placeholder="Search Parliament, DRDO, ISRO, AIIMS, Delhi..."
+  value="<%= typeof search !== 'undefined' ? search : '' %>"
+>
+
+  <button type="submit" class="hero-search-btn">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+
+  <i class="fa-solid fa-microphone mic-icon"></i>
+</form>
+
+<div id="suggestions-box" class="suggestions-box"></div>
+      <div class="hero-stats hero-animate delay-4">
+        <div class="hero-stat-box">
+          <h3><%= listings && listings.length ? listings.length : 0 %>+</h3>
+          <p>Educational Tours</p>
+        </div>
+
+<div class="hero-stat-box">
+  <h3>12+</h3>
+  <p>Educational Visits</p>
+</div>
+
+        <div class="hero-stat-box">
+          <h3>College</h3>
+          <p>Friendly Packages</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<div class="container mt-5" id="packages">
+<h2 class="text-center mb-4">
+  <% if (typeof search !== "undefined" && search) { %>
+    Search Results for "<%= search %>"
+  <% } else { %>
+    Educational Tour Packages for Schools & Colleges
+  <% } %>
+</h2>
+
+
+  <div class="row mt-4">
+    <% if (listings && listings.length > 0) { %>
+      <% listings.forEach(function(listing, i) { %>
+      <div class="col-lg-4 col-md-6 col-sm-12 mb-4 d-flex <%= i % 3 === 0 ? 'fade-left' : (i % 3 === 1 ? 'fade-up' : 'fade-right') %>" data-delay="<%= (i % 6) * 0.12 %>">
+         <div class="card tour-card border-0 shadow-sm h-100 w-100 rounded-4 overflow-hidden"
+     onclick="window.location.href='/listings/<%= listing._id %>'"
+     style="cursor:pointer;">
+           <span class="badge bg-warning text-dark position-absolute m-2">
+  <%= listing.category %>
+</span>
+            <div class="card-img-container position-relative">
+              <img
+                src="<%= listing.image && listing.image.url ? listing.image.url : 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?q=80&w=800&auto=format&fit=crop' %>"
+                class="card-img-top"
+                style="height: 230px; object-fit: cover;"
+                onerror="this.src='https://images.unsplash.com/photo-1503676260728-1c00da094a0b?q=80&w=800&auto=format&fit=crop';"
+                alt="<%= listing.title %>"
+              >
+<div class="card-title-overlay">
+
+  <h5><%= listing.title || "Educational Tour" %></h5>
+
+  <div class="overlay-bottom">
+    <!-- LEFT: PRICE -->
+    <div class="overlay-price">
+      ₹ <%= Number(listing.pricePerPerson || listing.price || 0).toLocaleString("en-IN") %>
+      <span>per person</span>
+    </div>
+
+    <!-- RIGHT: LOCATION -->
+    <div class="overlay-location">
+      📍 <%= listing.location || "-" %>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<div class="card-body d-flex flex-column">
+</div>
+
+          </div>
+        </div>
+      <% }) %>
+    <% } else { %>
+      <div class="col-12">
+        <div class="alert alert-light border rounded-4 shadow-sm text-center">
+          No tour packages available right now.
+        </div>
+      </div>
+    <% } %>
+  </div>
+</div>
+
+<!-- EDUCATIONAL GALLERY SECTION -->
+
+<section class="edu-gallery-section">
+
+  <div class="container">
+
+    <div class="gallery-heading text-center">
+
+      <span class="gallery-tag">
+        Educational Learning Experiences
+      </span>
+
+      <h2>
+        Student Educational Exposure Gallery
+      </h2>
+
+      <p>
+        Demonstration educational learning activities, institutional
+        visits and student exposure experiences.
+      </p>
+
+    </div>
+
+    <div class="gallery-grid">
+
+      <div class="gallery-item large">
+        <img
+          src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1400&auto=format&fit=crop"
+          alt=""
+        >
+      </div>
+
+      <div class="gallery-item">
+        <img
+          src="https://images.unsplash.com/photo-1509062522246-3755977927d7?q=80&w=1200&auto=format&fit=crop"
+          alt=""
+        >
+      </div>
+
+      <div class="gallery-item">
+        <img
+          src="https://images.unsplash.com/photo-1498243691581-b145c3f54a5a?q=80&w=1200&auto=format&fit=crop"
+          alt=""
+        >
+      </div>
+
+      <div class="gallery-item">
+        <img
+          src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1200&auto=format&fit=crop"
+          alt=""
+        >
+      </div>
+
+      <div class="gallery-item wide">
+        <img
+          src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=1400&auto=format&fit=crop"
+          alt=""
+        >
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+<!-- TRUST & EDUCATIONAL IMPACT SECTION START -->
+
+<section class="trust-section">
+
+  <div class="container">
+
+    <div class="trust-heading text-center">
+      <span class="trust-mini-title">
+        Trusted Educational Learning Platform
+      </span>
+
+<h2>
+Educational Exposure Tours For Universities & Colleges
+</h2>
+
+<p class="trust-subtitle">
+Educational exposure programs focused on practical learning,
+industry awareness and academic visits.
+</p>
+    </div>
+
+    <!-- STATS -->
+
+    <div class="trust-stats-grid">
+
+  <div class="trust-stat-card">
+    <h2>12+</h2>
+    <h4>Educational Visits Conducted</h4>
+    <p>Across science, research & governance tours</p>
+  </div>
+
+  <div class="trust-stat-card">
+    <h2>420+</h2>
+    <h4>Student Participants</h4>
+    <p>Verified educational batch registrations</p>
+  </div>
+
+  <div class="trust-stat-card">
+    <h2>8+</h2>
+<h4>Prototype Institutional Participation</h4>
+<p>Educational exposure demonstration batches</p>
+  </div>
+
+  <div class="trust-stat-card">
+    <h2>12+</h2>
+    <h4>Faculty Guided Batches</h4>
+    <p>Coordinated educational visits</p>
+  </div>
+
+</div>
+
+    <!-- CATEGORY SECTION -->
+
+    <div class="learning-categories">
+
+      <div class="category-box">
+        <h4>🚀 Space & Science Exposure</h4>
+        <p>
+          ISRO educational visits, space science learning and innovation exposure.
+        </p>
+      </div>
+
+      <div class="category-box">
+        <h4>🛡 Defence & Research Learning</h4>
+        <p>
+          DRDO and BARC research awareness & scientific exposure programs.
+        </p>
+      </div>
+
+      <div class="category-box">
+        <h4>🏥 Medical & Healthcare Learning</h4>
+        <p>
+          AIIMS healthcare infrastructure and medical education visits.
+        </p>
+      </div>
+
+      <div class="category-box">
+        <h4>💻 Technology & Engineering</h4>
+        <p>
+          IIT Delhi, Infosys and AI & Robotics innovation learning tours.
+        </p>
+      </div>
+
+      <div class="category-box">
+        <h4>🏛 Governance & Legal Awareness</h4>
+        <p>
+          Parliament and Supreme Court educational awareness visits.
+        </p>
+      </div>
+
+      <div class="category-box">
+        <h4>🎬 Media & Communication Learning</h4>
+        <p>
+          Film City and media production educational exposure tours.
+        </p>
+      </div>
+
+    </div>
+
+    <!-- TRUST BADGES -->
+
+    <div class="trust-badges">
+
+      <div class="trust-badge">
+        ✔ Student Verification System
+      </div>
+
+      <div class="trust-badge">
+        ✔ College Coordinator Approval
+      </div>
+
+      <div class="trust-badge">
+        ✔ Faculty Supervised Tours
+      </div>
+
+      <div class="trust-badge">
+        ✔ Secure Batch Management
+      </div>
+
+      <div class="trust-badge">
+        ✔ Educational Purpose Focused
+      </div>
+
+      <div class="trust-badge">
+        ✔ Institution Based Participation
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+<!-- TRUST & EDUCATIONAL IMPACT SECTION END -->
+ 
+<section class="student-review-section">
+  <h2>What Students Say</h2>
+
+  <div class="review-slider">
+    <div class="review-track">
+
+      <div class="review-card">
+        <p>"The IIT Delhi campus tour was amazing! We learned so much."</p>
+        <h5>- Ananya, Class 12</h5>
+      </div>
+
+      <div class="review-card">
+        <p>"Visiting Parliament House gave us real insight into democracy."</p>
+        <h5>- Rohan, Law Student</h5>
+      </div>
+
+      <div class="review-card">
+        <p>"The DRDO lab visit inspired me to pursue defense research."</p>
+        <h5>- Priya, Engineering Student</h5>
+      </div>
+
+      <div class="review-card">
+        <p>"ISRO visit helped us understand space science practically."</p>
+        <h5>- Aman, B.Sc Student</h5>
+      </div>
+
+      <div class="review-card">
+        <p>"Industry exposure tour gave us real corporate learning."</p>
+        <h5>- Neha, MCA Student</h5>
+      </div>
+
+    </div>
+  </div>
+</section>
+<script>
+  const searchInput = document.querySelector(".hero-search-bar input");
+  const suggestionsBox = document.getElementById("suggestions-box");
+  const micIcon = document.querySelector(".mic-icon");
+
+  let activeIndex = -1;
+  let suggestions = [];
+
+  function getIcon(category = "", title = "") {
+    const text = (category + " " + title).toLowerCase();
+
+    if (text.includes("government") || text.includes("parliament") || text.includes("court")) return "🏛";
+    if (text.includes("science") || text.includes("isro") || text.includes("drdo")) return "🧪";
+    if (text.includes("career") || text.includes("campus") || text.includes("iit")) return "🎓";
+    if (text.includes("industry") || text.includes("infosys")) return "🏢";
+    if (text.includes("medical") || text.includes("aiims")) return "🏥";
+
+    return "📍";
+  }
+
+  function renderSuggestions(data) {
+    suggestionsBox.innerHTML = "";
+    activeIndex = -1;
+    suggestions = data;
+
+    if (!data.length) {
+      suggestionsBox.innerHTML = `<div class="suggestion-item no-result">No results found</div>`;
+      suggestionsBox.style.display = "block";
+      return;
+    }
+
+    data.forEach((item, index) => {
+      const div = document.createElement("div");
+      div.className = "suggestion-item";
+      div.innerHTML = `
+        <span class="suggestion-icon">${getIcon(item.category, item.title)}</span>
+        <span>
+          <strong>${item.title}</strong><br>
+          <small>${item.location} • ${item.category}</small>
+        </span>
+      `;
+
+      div.onclick = function () {
+        window.location.href = `/listings?search=${encodeURIComponent(item.title)}`;
+      };
+
+      suggestionsBox.appendChild(div);
+    });
+
+    suggestionsBox.style.display = "block";
+  }
+
+  if (searchInput && suggestionsBox) {
+    searchInput.addEventListener("input", async function () {
+      const query = searchInput.value.trim();
+
+      if (query.length < 1) {
+        suggestionsBox.style.display = "none";
+        suggestionsBox.innerHTML = "";
+        return;
+      }
+
+      const res = await fetch(`/listings/search-suggestions?q=${encodeURIComponent(query)}`);
+      const data = await res.json();
+
+      renderSuggestions(data);
+    });
+
+    searchInput.addEventListener("keydown", function (e) {
+      const items = suggestionsBox.querySelectorAll(".suggestion-item:not(.no-result)");
+
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        activeIndex = (activeIndex + 1) % items.length;
+      }
+
+      if (e.key === "ArrowUp") {
+        e.preventDefault();
+        activeIndex = (activeIndex - 1 + items.length) % items.length;
+      }
+
+      if (e.key === "Enter") {
+        if (activeIndex >= 0 && suggestions[activeIndex]) {
+          e.preventDefault();
+          window.location.href = `/listings?search=${encodeURIComponent(suggestions[activeIndex].title)}`;
+        }
+      }
+
+      items.forEach((item, index) => {
+        item.classList.toggle("active", index === activeIndex);
+      });
+    });
+
+    document.addEventListener("click", function (e) {
+      if (!e.target.closest(".hero-search-bar") && !e.target.closest("#suggestions-box")) {
+        suggestionsBox.style.display = "none";
+      }
+    });
+  }
+  // 🎤 VOICE SEARCH
+if (micIcon && searchInput) {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  if (SpeechRecognition) {
+    const recognition = new SpeechRecognition();
+
+    recognition.lang = "en-IN";
+    recognition.continuous = false;
+    recognition.interimResults = false;
+
+    micIcon.style.cursor = "pointer";
+
+    micIcon.addEventListener("click", function () {
+      recognition.start();
+      micIcon.style.color = "#d4a017"; // active color
+    });
+
+    recognition.onresult = function (event) {
+      const voiceText = event.results[0][0].transcript;
+
+      searchInput.value = voiceText;
+
+      // auto search
+      window.location.href = `/listings?search=${encodeURIComponent(voiceText)}`;
+    };
+
+    recognition.onend = function () {
+      micIcon.style.color = "#8f8f8f";
+    };
+
+    recognition.onerror = function () {
+      alert("Microphone permission allow karo");
+      micIcon.style.color = "#8f8f8f";
+    };
+
+  } else {
+    micIcon.addEventListener("click", function () {
+      alert("Voice search only Chrome me work karta hai");
+    });
+  }
+}
+// HOME CARD STAGGER ANIMATION
+const animateItems = document.querySelectorAll(".fade-left, .fade-right, .fade-up");
+animateItems.forEach((item) => {
+  item.style.transitionDelay = item.dataset.delay + "s";
+});
+
+function runHomeAnimations() {
+  animateItems.forEach((item) => {
+    const top = item.getBoundingClientRect().top;
+
+    if (top < window.innerHeight - 80) {
+      item.classList.add("show");
+    }
+  });
+}
+
+window.addEventListener("scroll", runHomeAnimations);
+window.addEventListener("load", runHomeAnimations);
+
+// HERO TYPING TEXT
+const typingText = document.getElementById("typingText");
+const heroText = "Explore Educational Tours for Students";
+let typingIndex = 0;
+
+function typeHeroText() {
+  if (!typingText) return;
+
+  if (typingIndex < heroText.length) {
+    typingText.textContent += heroText.charAt(typingIndex);
+    typingIndex++;
+    setTimeout(typeHeroText, 55);
+  }
+}
+
+window.addEventListener("load", typeHeroText);
+</script>

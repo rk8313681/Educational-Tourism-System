@@ -1,0 +1,48 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="auth-page">
+  <div class="auth-card auth-card-small">
+
+    <div class="auth-left forgot-bg">
+      <div class="auth-overlay"></div>
+      <div class="auth-left-content">
+        <div class="auth-brand-mini">
+          <i class="fa-solid fa-graduation-cap"></i>
+          <span>Educational Tourism</span>
+        </div>
+
+        <span class="auth-tag">Account Recovery</span>
+        <h2>Forgot Password?</h2>
+        <p>
+          Enter your username and registered email address and we will send you an OTP
+          to reset your password securely.
+        </p>
+      </div>
+    </div>
+
+    <div class="auth-right">
+      <h1>Recover Account</h1>
+      <p class="auth-subtext">We’ll send you an OTP to verify your identity</p>
+
+      <form action="/forgot" method="POST" class="auth-form">
+        <div class="auth-group">
+          <label for="username">Username</label>
+          <input type="text" id="username" name="username" placeholder="Enter your username" required>
+        </div>
+
+        <div class="auth-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" name="email" placeholder="Enter your email" required>
+        </div>
+
+        <button class="auth-btn" type="submit">Send OTP</button>
+      </form>
+
+      <p class="auth-switch">
+        Remember your password?
+        <a href="/login">Login</a>
+      </p>
+    </div>
+
+  </div>
+</div>

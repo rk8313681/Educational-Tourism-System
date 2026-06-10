@@ -1,0 +1,375 @@
+<% layout("/layouts/admin") %>
+
+<div class="container admin-bookings-page mt-4 mb-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold mb-0">Booking Requests</h2>
+    <a href="/admin" class="btn btn-outline-dark btn-sm">Back to Dashboard</a>
+  </div>
+
+  <div class="row">
+    <% if (bookings && bookings.length > 0) { %>
+      <% bookings.forEach(function(booking) { %>
+      <div class="col-lg-6 mb-4 booking-filter-item"
+     data-status="<%= booking.status %>"
+     data-payment="<%= booking.paymentStatus || 'pending' %>"
+     data-date="<%= booking.createdAt ? booking.createdAt.toISOString().slice(0,10) : '' %>">
+          <div class="card admin-booking-card shadow-sm border-0 rounded-4 h-100">
+            <img
+              src="<%= booking.listing && booking.listing.image && booking.listing.image.url ? booking.listing.image.url : 'https://via.placeholder.com/400x250' %>"
+              class="card-img-top rounded-top-4"
+              style="height:170px; object-fit:cover;"
+              alt="Tour Image"
+            >
+
+            <div class="card-body d-flex flex-column">
+              <h5 class="fw-bold mb-2">
+                <%= booking.listing && booking.listing.title ? booking.listing.title : "Deleted Package" %>
+              </h5>
+
+              <p class="mb-1">
+                <strong>User:</strong>
+                <%= booking.user && booking.user.username ? booking.user.username : "Unknown User" %>
+              </p>
+
+              <p class="mb-1">
+                <strong>Email:</strong>
+                <%= booking.user && booking.user.email ? booking.user.email : "-" %>
+              </p>
+
+              <p class="mb-1">
+                <strong>Location:</strong>
+                <%= booking.listing && booking.listing.location ? booking.listing.location : "-" %>
+              </p>
+
+              <p class="mb-1">
+                <strong>Duration:</strong>
+                <%= booking.listing && booking.listing.duration ? booking.listing.duration : "-" %>
+              </p>
+
+              <p class="mb-1">
+                <strong>Departure:</strong>
+                <%= booking.departure || "Not specified" %>
+              </p>
+
+              <p class="mb-1">
+                <strong>Students:</strong>
+                <%= booking.students || 1 %>
+              </p>
+
+            <% if (booking.studentsData && booking.studentsData.length > 0) { %>
+
+  <div class="mt-3 mb-3">
+
+    <h6 class="fw-bold mb-3">
+      Student Verification Details
+    </h6>
+
+    <div class="table-responsive">
+
+      <table class="table table-bordered table-hover align-middle">
+
+        <thead class="table-dark">
+
+          <tr>
+            <th>#</th>
+            <th>Student</th>
+            <th>Enrollment</th>
+            <th>Phone</th>
+            <th>ID Proof</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+
+        </thead>
+
+        <tbody>
+
+          <% booking.studentsData.forEach(function(student, index) { %>
+
+            <tr>
+
+              <td>
+                <%= index + 1 %>
+              </td>
+
+              <td>
+                <%= student.fullName || "-" %>
+              </td>
+
+              <td>
+                <%= student.enrollmentNo || "-" %>
+              </td>
+
+              <td>
+                <%= student.studentPhone || "-" %>
+              </td>
+
+              <td>
+
+                <% if (student.studentIdProof && student.studentIdProof.url) { %>
+
+                  <a
+                    href="<%= student.studentIdProof.url %>"
+                    target="_blank"
+                    class="btn btn-outline-primary btn-sm"
+                  >
+                    View
+                  </a>
+
+                <% } else { %>
+
+                  <span class="text-danger">
+                    No File
+                  </span>
+
+                <% } %>
+
+              </td>
+
+              <td>
+
+                <span class="badge
+                  <%= student.verificationStatus === 'verified'
+                    ? 'bg-success'
+                    : student.verificationStatus === 'rejected'
+                    ? 'bg-danger'
+                    : 'bg-warning text-dark'
+                  %>">
+
+                  <%= student.verificationStatus %>
+
+                </span>
+
+              </td>
+
+              <td>
+
+                <% if (student.verificationStatus !== "verified") { %>
+
+                  <form
+                    method="POST"
+                    action="/admin/bookings/<%= booking._id %>/students/<%= index %>/verify"
+                  >
+
+                    <button class="btn btn-success btn-sm">
+
+                      Verify
+
+                    </button>
+
+                  </form>
+
+                <% } else { %>
+
+                  <span class="text-success fw-bold">
+                    Verified
+                  </span>
+
+                <% } %>
+
+              </td>
+
+            </tr>
+
+          <% }) %>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+<% } %>  
+
+              <p class="mb-1">
+  <strong>College:</strong>
+  <%= booking.collegeName || "-" %>
+</p>
+
+<p class="mb-1">
+  <strong>Coordinator:</strong>
+  <%= booking.coordinatorName || "-" %>
+</p>
+
+<p class="mb-1">
+  <strong>Phone:</strong>
+  <%= booking.phone || "-" %>
+</p>
+
+<% if (booking.collegeProof && booking.collegeProof.url) { %>
+  <p class="mb-1">
+    <strong>College Proof:</strong>
+    <a href="<%= booking.collegeProof.url %>" target="_blank" class="btn btn-outline-primary btn-sm">
+      View Proof
+    </a>
+  </p>
+<% } else { %>
+  <p class="mb-1 text-danger">
+    <strong>College Proof:</strong> Not Uploaded
+  </p>
+<% } %>
+
+<p class="mb-1">
+  <strong>Verification:</strong>
+  <span class="badge <%= booking.verificationStatus === 'verified' ? 'bg-success' : 'bg-secondary' %>">
+    <%= booking.verificationStatus === "verified" ? "Verified" : "Not Verified" %>
+  </span>
+</p>
+<% if (booking.verificationStatus !== "verified") { %>
+  <form method="POST" action="/admin/bookings/<%= booking._id %>/verify">
+    <button class="btn btn-outline-success btn-sm mt-2">
+      Verify Document
+    </button>
+  </form>
+<% } %>
+
+<% if (booking.specialRequest) { %>
+  <p class="mb-1">
+    <strong>Request:</strong>
+    <%= booking.specialRequest %>
+  </p>
+<% } %>
+
+              <p class="mb-1">
+                <strong>Total:</strong>
+                ₹ <%= Number(booking.totalPrice || 0).toLocaleString("en-IN") %>
+              </p>
+
+<p class="mb-3">
+  <strong>Status:</strong>
+  <span class="badge 
+    <%= booking.status === 'pending'
+      ? 'bg-warning text-dark'
+      : booking.status === 'low_booking'
+      ? 'bg-warning text-dark'
+      : booking.status === 'payment_pending'
+      ? 'bg-info text-dark'
+      : booking.status === 'confirmed'
+      ? 'bg-success'
+      : booking.status === 'completed'
+      ? 'bg-primary'
+      : 'bg-danger' %>">
+    <%= booking.status === "pending"
+      ? "Pending Approval"
+      : booking.status === "low_booking"
+      ? "Waiting for Minimum Students"
+      : booking.status === "payment_pending"
+      ? "Approved - Waiting for Payment"
+      : booking.status === "confirmed"
+      ? "Confirmed"
+      : booking.status === "completed"
+      ? "Completed"
+      : "Cancelled" %>
+  </span>
+</p>
+
+<p class="mb-3">
+  <strong>Payment:</strong>
+  <span class="badge <%= booking.paymentStatus === 'paid' ? 'bg-success' : 'bg-secondary' %>">
+    <%= booking.paymentStatus === "paid" ? "Paid" : "Pending" %>
+  </span>
+</p>
+
+<% if (booking.status === "low_booking") { %>
+  <div class="alert alert-warning py-2 mb-3">
+Minimum seats are not reached yet. Admin can proceed anyway, reschedule, or cancel/refund this booking.
+  </div>
+<% } %>
+<% if (booking.adminNote) { %>
+  <p class="mb-1"><b>Admin Note:</b> <%= booking.adminNote %></p>
+<% } %>
+
+<% if (booking.cancelledBy) { %>
+  <p class="mb-1"><b>Cancelled By:</b> <%= booking.cancelledBy %></p>
+<% } %>
+
+<% if (booking.cancelReason) { %>
+  <p class="mb-3"><b>Cancel Reason:</b> <%= booking.cancelReason %></p>
+<% } %>
+              <div class="mt-auto">
+<% if (booking.status === "pending") { %>
+  <div class="admin-booking-actions">
+    <form method="POST" action="/admin/bookings/<%= booking._id %>/approve">
+      <textarea name="adminNote" class="form-control mb-2"
+        placeholder="Admin note (e.g. Bring ID, report at 8 AM)"></textarea>
+      <button class="btn btn-success btn-sm mb-2">Approve</button>
+    </form>
+
+    <form method="POST" action="/admin/bookings/<%= booking._id %>/reject">
+      <textarea name="cancelReason" class="form-control mb-2"
+        placeholder="Cancel reason"></textarea>
+      <textarea name="adminNote" class="form-control mb-2"
+        placeholder="Optional note"></textarea>
+      <button class="btn btn-danger btn-sm">Reject</button>
+    </form>
+  </div>
+
+<% } else if (booking.status === "low_booking") { %>
+  <div class="admin-booking-actions">
+    <form method="POST" action="/admin/bookings/<%= booking._id %>/proceed">
+      <textarea name="adminNote" class="form-control mb-2"
+        placeholder="Note for user"></textarea>
+      <button class="btn btn-success btn-sm mb-2">
+        Proceed Anyway
+      </button>
+    </form>
+    
+    <input
+  type="text"
+  name="newDeparture"
+  class="form-control mb-2"
+  placeholder="New departure batch (e.g. 25 June 2026)"
+>
+
+    <form method="POST" action="/admin/bookings/<%= booking._id %>/reschedule">
+      <textarea name="adminNote" class="form-control mb-2"
+        placeholder="Reschedule note"></textarea>
+      <button class="btn btn-warning btn-sm mb-2">
+        Reschedule
+      </button>
+    </form>
+
+    <form method="POST" action="/admin/bookings/<%= booking._id %>/reject">
+      <textarea name="cancelReason" class="form-control mb-2"
+        placeholder="Cancel/refund reason"></textarea>
+      <textarea name="adminNote" class="form-control mb-2"
+        placeholder="Refund note"></textarea>
+      <button class="btn btn-danger btn-sm">
+        Cancel & Refund
+      </button>
+    </form>
+  </div>
+
+<% } else { %>
+                  <p class="text-muted small mb-2">
+<% if (booking.status === "low_booking") { %>
+  Waiting for minimum students before admin approval.
+<% } else if (booking.status === "payment_pending") { %>
+  Booking approved. Waiting for user payment.
+<% } else if (booking.status === "confirmed") { %>
+  Booking confirmed successfully.
+<% } else { %>
+  No pending action for this booking.
+<% } %>
+</p>
+                <% } %>
+
+                <form method="POST" action="/admin/bookings/<%= booking._id %>?_method=DELETE">
+                  <button class="btn btn-outline-danger btn-sm">Delete Booking</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% }) %>
+    <% } else { %>
+      <div class="col-12">
+        <div class="alert alert-light border rounded-4 shadow-sm">
+          No booking requests found.
+        </div>
+      </div>
+    <% } %>
+  </div>
+</div>

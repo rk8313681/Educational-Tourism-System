@@ -1,0 +1,44 @@
+<% layout("/layouts/admin") %>
+
+<div class="admin-panel-card">
+  <div class="panel-header">
+    <h4>Payments</h4>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table admin-table">
+      <thead>
+        <tr>
+          <th>User</th>
+          <th>Tour</th>
+          <th>Amount</th>
+          <th>Payment ID</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (bookings.length > 0) { %>
+          <% bookings.forEach(booking => { %>
+            <tr>
+              <td><%= booking.user?.username || "N/A" %></td>
+              <td><%= booking.listing?.title || "Deleted Listing" %></td>
+              <td>₹ <%= Number(booking.totalPrice || 0).toLocaleString("en-IN") %></td>
+              <td><%= booking.paymentId || "Not Paid Yet" %></td>
+              <td>
+                <% if (booking.paymentId) { %>
+                  <span class="status-badge success">Paid</span>
+                <% } else { %>
+                  <span class="status-badge pending">Pending</span>
+                <% } %>
+              </td>
+            </tr>
+          <% }) %>
+        <% } else { %>
+          <tr>
+            <td colspan="5" class="text-center">No payment records found</td>
+          </tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel | Educational Tourism</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+
+  <div class="admin-wrapper">
+    <button class="admin-menu-toggle" onclick="toggleAdminSidebar()">
+  <i class="fa-solid fa-bars"></i>
+</button>
+
+<div class="admin-overlay" onclick="toggleAdminSidebar()"></div>
+    <%- include("../includes/adminSidebar") %>
+
+    <div class="admin-main">
+      <%- include("../includes/adminTopbar") %>
+
+      <div class="admin-content container-fluid py-4">
+        
+        <% if (success && success.length > 0) { %>
+          <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <%= success %>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+          </div>
+        <% } %>
+        <% if (error && error.length > 0) { %>
+          <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <%= error %>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+          </div>
+        <% } %>
+
+        <%- body %>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  function toggleAdminSidebar() {
+    document.body.classList.toggle("admin-sidebar-open");
+  }
+</script>
+</body>
+</html>

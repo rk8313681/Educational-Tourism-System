@@ -1,0 +1,133 @@
+<% layout("/layouts/admin") %>
+
+<div class="container mt-4 mb-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold mb-0">Payments Dashboard</h2>
+    <a href="/admin" class="btn btn-outline-dark btn-sm">Back to Dashboard</a>
+  </div>
+
+  <div class="row g-4 mb-4">
+    <div class="col-md-3">
+      <div class="card border-0 shadow-sm rounded-4 p-3">
+        <h6 class="text-muted">Total Revenue</h6>
+        <h3 class="fw-bold">
+          ₹ <%= bookings
+           .filter(b => b.paymentStatus === "paid" && b.status !== "cancelled")
+            .reduce((sum, b) => sum + Number(b.totalPrice || 0), 0)
+            .toLocaleString("en-IN") %>
+        </h3>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card border-0 shadow-sm rounded-4 p-3">
+        <h6 class="text-muted">Paid Bookings</h6>
+        <h3 class="fw-bold">
+          <%= bookings.filter(b => b.paymentStatus === "paid" && b.status !== "cancelled").length %>
+        </h3>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card border-0 shadow-sm rounded-4 p-3">
+        <h6 class="text-muted">Pending Payments</h6>
+        <h3 class="fw-bold">
+         <%= bookings.filter(b => b.paymentStatus !== "paid" && b.status !== "cancelled").length %>
+        </h3>
+      </div>
+    </div>
+      <div class="col-md-3">
+  <div class="card border-0 shadow-sm rounded-4 p-3">
+    <h6 class="text-muted">Cancelled Bookings</h6>
+    <h3 class="fw-bold">
+      <%= bookings.filter(b => b.status === "cancelled").length %>
+    </h3>
+  </div>
+</div>
+  </div>
+
+  <div class="card border-0 shadow-sm rounded-4">
+    <div class="card-body">
+      <h4 class="fw-bold mb-3">Payment Records</h4>
+
+      <div class="table-responsive">
+        <table class="table align-middle">
+          <thead>
+            <tr>
+              <th>User</th>
+              <th>Tour</th>
+              <th>Students</th>
+              <th>Amount</th>
+              <th>Payment</th>
+              <th>Booking Status</th>
+              <th>Payment ID</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <% if (bookings && bookings.length > 0) { %>
+              <% bookings.forEach(function(b) { %>
+                <tr>
+                  <td><%= b.user && b.user.username ? b.user.username : "N/A" %></td>
+
+                  <td>
+                    <%= b.listing && b.listing.title ? b.listing.title : "Deleted Tour" %>
+                  </td>
+
+                  <td><%= b.students || 1 %></td>
+
+                  <td>
+                    ₹ <%= Number(b.totalPrice || 0).toLocaleString("en-IN") %>
+                  </td>
+
+                  <td>
+                    <span class="badge <%= b.paymentStatus === 'paid' ? 'bg-success' : 'bg-secondary' %>">
+                      <%= b.paymentStatus === "paid" ? "Paid" : "Pending" %>
+                    </span>
+                  </td>
+
+                  <td>
+                    <span class="badge 
+                      <%= b.status === 'confirmed'
+                        ? 'bg-success'
+                        : b.status === 'payment_pending'
+                        ? 'bg-info text-dark'
+                        : b.status === 'pending'
+                        ? 'bg-warning text-dark'
+                        : b.status === 'low_booking'
+                        ? 'bg-warning text-dark'
+                        : b.status === 'completed'
+                        ? 'bg-primary'
+                        : 'bg-danger' %>">
+                      <%= b.status === "pending"
+  ? "Pending Approval"
+  : b.status === "low_booking"
+  ? "Waiting for Minimum Students"
+  : b.status === "payment_pending"
+  ? "Waiting for Payment"
+  : b.status === "confirmed"
+  ? "Confirmed"
+  : b.status === "completed"
+  ? "Completed"
+  : "Cancelled" %>
+                    </span>
+                  </td>
+
+                  <td>
+                    <small><%= b.paymentId || "-" %></small>
+                  </td>
+                </tr>
+              <% }) %>
+            <% } else { %>
+              <tr>
+                <td colspan="7" class="text-center text-muted">
+                  No payment records found.
+                </td>
+              </tr>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

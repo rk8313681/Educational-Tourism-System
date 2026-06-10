@@ -1,0 +1,672 @@
+<% layout("/layouts/boilerplate") %>
+
+<%
+  const bgUrl =
+    listing && listing.image && listing.image.url
+      ? listing.image.url
+      : "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?q=80&w=800&auto=format&fit=crop";
+
+  const hostName =
+    listing && listing.owner && listing.owner.username
+      ? listing.owner.username
+      : "Host";
+
+  const finalPrice =
+    listing && listing.pricePerPerson
+      ? listing.pricePerPerson
+      : listing && listing.price
+      ? listing.price
+      : 0;
+
+  const reviewList = listing && listing.reviews ? listing.reviews : [];
+  const nearbyList = listing && listing.nearbyPlaces ? listing.nearbyPlaces : [];
+  const itineraryList = listing && listing.itinerary ? listing.itinerary : [];
+  const inclusionList = listing && listing.inclusions ? listing.inclusions : [];
+  const exclusionList = listing && listing.exclusions ? listing.exclusions : [];
+  const highlightList = listing && listing.tourHighlights ? listing.tourHighlights : [];
+  const policyList = listing && listing.packagePolicy ? listing.packagePolicy : [];
+  const cancelList = listing && listing.cancellationPolicy ? listing.cancellationPolicy : [];
+  const hotel = listing && listing.hotel ? listing.hotel : {};
+  const meals = listing && listing.meals ? listing.meals : {};
+  const transport = listing && listing.transport ? listing.transport : {};
+  const departureBatches = listing && listing.departureBatches ? listing.departureBatches : [];
+%>
+
+<div class="container mt-5 mb-5">
+
+  <!-- ROW 1: IMAGE + RIGHT SIDEBAR -->
+  <div class="row g-4 align-items-start">
+
+    <!-- LEFT SIDE -->
+    <div class="col-lg-8">
+
+      <!-- IMAGE -->
+      <div class="nb-tour-image-wrapper mb-4">
+        <img src="<%= bgUrl %>" alt="<%= listing.title %>" class="nb-tour-hero-img">
+
+        <div class="nb-tour-tag">
+          Educational Tour
+        </div>
+
+        <div class="nb-tour-bottom-strip">
+          <span>Campus Visit</span>
+          <span>Industrial Visit</span>
+          <span>Science Tour</span>
+          <span>Career Exposure</span>
+        </div>
+      </div>
+      <div class="tour-tabs mb-4">
+  <button class="tab-btn active" type="button" onclick="openTab(event, 'overview')">Overview</button>
+  <button class="tab-btn" type="button" onclick="openTab(event, 'hotel')">Hotel</button>
+  <button class="tab-btn" type="button" onclick="openTab(event, 'meals')">Meals</button>
+  <button class="tab-btn" type="button" onclick="openTab(event, 'transport')">Transport</button>
+  <button class="tab-btn" type="button" onclick="openTab(event, 'itinerary')">Itinerary</button>
+  <button class="tab-btn" type="button" onclick="openTab(event, 'policy')">Policy</button>
+</div>
+<div id="overview" class="tab-content active">
+  <!-- MAIN INFO CARD -->
+  <div class="premium-side-card overview-info-card mb-4">
+        <h3 class="fw-bold mb-1">₹ <%= Number(finalPrice).toLocaleString("en-IN") %></h3>
+        <span class="text-muted">per person</span>
+
+        <% if (listing.duration) { %>
+          <p class="mt-2 mb-1"><strong>Duration:</strong> <%= listing.duration %></p>
+        <% } %>
+
+        <% if (listing.startingPoint) { %>
+          <p class="mb-1"><strong>Starting Point:</strong> <%= listing.startingPoint %></p>
+        <% } %>
+
+        <% if (listing.availability) { %>
+          <p class="mb-1"><strong>Availability:</strong> <%= listing.availability %></p>
+        <% } %>
+
+        <p class="mb-0"><strong>Hosted by:</strong> <%= hostName %></p>
+      </div>
+      
+<div class="premium-side-card overview-about-card mb-4">
+  <h3 class="premium-card-title mb-3">About Tour</h3>
+  <p class="mb-0"><%= listing.description || "No description available." %></p>
+</div>
+            </div>
+               <div id="hotel" class="tab-content">
+      <% if (hotel.hotelName || hotel.roomType || hotel.nights || hotel.hotelAddress || hotel.stayNotes) { %>
+        <h4 class="mt-4">Stay and Hotel Details</h4>
+        <div class="card border-0 shadow-sm rounded-4 p-3 mb-4">
+          <% if (hotel.hotelName) { %><p class="mb-2"><strong>Hotel:</strong> <%= hotel.hotelName %></p><% } %>
+          <% if (hotel.roomType) { %><p class="mb-2"><strong>Room Type:</strong> <%= hotel.roomType %></p><% } %>
+          <% if (hotel.nights) { %><p class="mb-2"><strong>Nights:</strong> <%= hotel.nights %></p><% } %>
+          <% if (hotel.hotelAddress) { %><p class="mb-2"><strong>Hotel Address:</strong> <%= hotel.hotelAddress %></p><% } %>
+          <% if (hotel.stayNotes) { %><p class="mb-0"><strong>Stay Notes:</strong> <%= hotel.stayNotes %></p><% } %>
+        </div>
+      <% } %>
+              </div>
+                    <div id="meals" class="tab-content">
+      <% if (meals.breakfast || meals.lunch || meals.dinner || meals.mealPlan) { %>
+        <h4 class="mt-4">Meals Details</h4>
+        <div class="card border-0 shadow-sm rounded-4 p-3 mb-4">
+          <div class="d-flex flex-wrap gap-2 mb-2">
+            <% if (meals.breakfast) { %><span class="badge bg-light text-dark border">Breakfast</span><% } %>
+            <% if (meals.lunch) { %><span class="badge bg-light text-dark border">Lunch</span><% } %>
+            <% if (meals.dinner) { %><span class="badge bg-light text-dark border">Dinner</span><% } %>
+          </div>
+          <% if (meals.mealPlan) { %><p class="mb-0"><strong>Meal Plan:</strong> <%= meals.mealPlan %></p><% } %>
+        </div>
+      <% } %>
+              </div>
+                    <div id="transport" class="tab-content">
+      <% if (transport.type || transport.vehicleName || transport.capacity || transport.pickupPoint || transport.dropPoint) { %>
+        <h4 class="mt-4">Transport Details</h4>
+        <div class="card border-0 shadow-sm rounded-4 p-3 mb-4">
+          <% if (transport.type) { %><p class="mb-2"><strong>Transport Type:</strong> <%= transport.type %></p><% } %>
+          <% if (transport.vehicleName) { %><p class="mb-2"><strong>Vehicle:</strong> <%= transport.vehicleName %></p><% } %>
+          <% if (transport.capacity) { %><p class="mb-2"><strong>Capacity:</strong> <%= transport.capacity %></p><% } %>
+          <% if (transport.pickupPoint) { %><p class="mb-2"><strong>Pickup Point:</strong> <%= transport.pickupPoint %></p><% } %>
+          <% if (transport.dropPoint) { %><p class="mb-2"><strong>Drop Point:</strong> <%= transport.dropPoint %></p><% } %>
+
+          <div class="d-flex flex-wrap gap-2">
+            <% if (transport.driverIncluded) { %><span class="badge bg-light text-dark border">Driver Included</span><% } %>
+            <% if (transport.fuelIncluded) { %><span class="badge bg-light text-dark border">Fuel Included</span><% } %>
+          </div>
+        </div>
+      <% } %>
+              </div>
+                          <div id="itinerary" class="tab-content">
+        <h4 class="mt-4">Available Batches</h4>
+        <div class="card border-0 shadow-sm rounded-4 p-3 mb-4">
+          <% if (departureBatches.length > 0) { %>
+            <ul class="mb-0">
+              <% departureBatches.forEach(function(batch) { %>
+                <% if (batch.date) { %>
+                  <li><strong><%= batch.date %></strong> - Seats: <%= batch.seats || 0 %></li>
+                <% } %>
+              <% }) %>
+            </ul>
+          <% } else { %>
+            <p class="mb-0 text-muted">No batches available.</p>
+          <% } %>
+        </div>
+
+        <h3 class="mt-4">Tour Itinerary</h3>
+        <% if (itineraryList.length > 0) { %>
+          <div class="timeline">
+            <% itineraryList.forEach(function(day) { %>
+              <div class="timeline-item">
+                <div class="dot"></div>
+                <div class="content card border-0 shadow-sm rounded-4 p-3 mb-3">
+                  <h5 class="fw-bold mb-1">Day <%= day.day %> - <%= day.title || "Tour Activity" %></h5>
+
+                  <% if (day.subtitle) { %>
+                    <p class="text-primary mb-2"><%= day.subtitle %></p>
+                  <% } %>
+
+                  <% if (day.description) { %>
+                    <p class="mb-2"><%= day.description %></p>
+                  <% } %>
+
+                  <% if (day.stay) { %>
+                    <p class="mb-2"><strong>Stay:</strong> <%= day.stay %></p>
+                  <% } %>
+
+                  <% if (day.transport && (day.transport.from || day.transport.to || day.transport.mode || day.transport.distance || day.transport.time)) { %>
+                    <div class="mb-2">
+                      <p class="mb-1">
+                        <strong>Transport:</strong> <%= day.transport.mode || "Transport" %>
+                        <% if (day.transport.distance) { %> | <%= day.transport.distance %><% } %>
+                        <% if (day.transport.time) { %> | <%= day.transport.time %><% } %>
+                      </p>
+                      <% if (day.transport.from || day.transport.to) { %>
+                        <p class="mb-0"><strong>Route:</strong> <%= day.transport.from || "-" %> → <%= day.transport.to || "-" %></p>
+                      <% } %>
+                    </div>
+                  <% } %>
+
+                  <% if (day.meals && day.meals.length > 0) { %>
+                    <p class="mb-2"><strong>Meals:</strong> <%= day.meals.join(", ") %></p>
+                  <% } %>
+
+                  <% if (day.activities && day.activities.length > 0) { %>
+                    <div>
+                      <strong>Activities:</strong>
+                      <ul class="mb-0 mt-1">
+                        <% day.activities.forEach(function(activity) { %>
+                          <% if (activity && activity.trim()) { %>
+                            <li><%= activity %></li>
+                          <% } %>
+                        <% }) %>
+                      </ul>
+                    </div>
+                  <% } %>
+                </div>
+              </div>
+            <% }) %>
+          </div>
+        <% } else { %>
+          <div class="card border-0 shadow-sm rounded-4 p-3 mb-3">
+            <p class="mb-0 text-muted">No itinerary added yet.</p>
+          </div>
+        <% } %>
+      </div>
+               <div id="policy" class="tab-content">
+                      <% if (inclusionList.length > 0) { %>
+        <h4 class="mt-4">Tour Inclusions</h4>
+        <div class="card border-0 shadow-sm rounded-4 p-3 mb-4">
+          <ul class="mb-0">
+            <% inclusionList.forEach(function(item) { %>
+              <% if (item && item.trim()) { %><li><%= item %></li><% } %>
+            <% }) %>
+          </ul>
+        </div>
+      <% } %>
+
+
+      <% if (policyList.length > 0) { %>
+        <h4 class="mt-4">Package Policy and Terms</h4>
+        <div class="card border-0 shadow-sm rounded-4 p-3 mb-4">
+          <ul class="mb-0">
+            <% policyList.forEach(function(item) { %>
+              <% if (item && item.trim()) { %><li><%= item %></li><% } %>
+            <% }) %>
+          </ul>
+        </div>
+      <% } %>
+
+      <% if (cancelList.length > 0) { %>
+        <h4 class="mt-4">Cancellation Policy</h4>
+        <div class="card border-0 shadow-sm rounded-4 p-3 mb-4">
+          <ul class="mb-0">
+            <% cancelList.forEach(function(item) { %>
+              <% if (item && item.trim()) { %><li><%= item %></li><% } %>
+            <% }) %>
+          </ul>
+        </div>
+      <% } %>
+
+      <h4 class="mt-4">About Location</h4>
+      <p><%= listing.aboutLocation || "No information available." %></p>
+
+      <h5>Nearby Places</h5>
+      <ul>
+        <% if (nearbyList.length > 0) { %>
+          <% nearbyList.forEach(function(place) { %>
+            <% if (place && place.trim()) { %><li><%= place %></li><% } %>
+          <% }) %>
+        <% } else { %>
+          <li>No nearby places available</li>
+        <% } %>
+      </ul>
+
+      <% if (currUser) { %>
+        <h4 class="mt-4">Leave a Review</h4>
+        <form action="/listings/<%= listing._id %>/reviews" method="POST">
+          <div class="mb-3">
+            <label class="form-label">Rating</label>
+            <div class="star-rating">
+              <input type="radio" name="review[rating]" value="5" id="star5"><label for="star5">★</label>
+              <input type="radio" name="review[rating]" value="4" id="star4"><label for="star4">★</label>
+              <input type="radio" name="review[rating]" value="3" id="star3"><label for="star3">★</label>
+              <input type="radio" name="review[rating]" value="2" id="star2"><label for="star2">★</label>
+              <input type="radio" name="review[rating]" value="1" id="star1"><label for="star1">★</label>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Comment</label>
+            <textarea name="review[comment]" class="form-control" required></textarea>
+          </div>
+
+          <button class="btn btn-dark">Submit</button>
+        </form>
+      <% } %>
+
+      <h4 class="mt-4">Reviews</h4>
+      <div class="row">
+        <% if (reviewList.length > 0) { %>
+          <% reviewList.forEach(function(review) { %>
+            <div class="col-md-6 mb-3">
+              <div class="card border-0 shadow-sm rounded-4 p-3">
+                <div class="d-flex justify-content-between">
+                  <h6 class="fw-bold mb-1">@<%= review.author && review.author.username ? review.author.username : "Anonymous" %></h6>
+                  <small class="text-warning">⭐ <%= review.rating %></small>
+                </div>
+                <p class="text-muted mb-0"><%= review.comment %></p>
+
+                <% if (currUser && review.author && review.author._id && review.author._id.toString() === currUser._id.toString()) { %>
+                  <form method="POST" action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE" class="mt-2">
+                    <button class="btn btn-sm btn-outline-danger">Delete</button>
+                  </form>
+                <% } %>
+              </div>
+            </div>
+          <% }) %>
+        <% } else { %>
+          <p class="text-muted">No reviews yet.</p>
+        <% } %>
+       </div>
+        </div>
+    </div>
+
+   <!-- RIGHT SIDE -->
+<div class="col-lg-4 d-flex flex-column">
+  <div class="right-side-wrapper">
+
+    <!-- TOUR INCLUDES -->
+    <div class="premium-side-card includes-premium-card mb-4">
+      <div class="premium-card-header">
+        <h4 class="premium-card-title">Tour Includes</h4>
+        <span class="premium-badge">Included</span>
+      </div>
+
+      <div class="includes-icon-grid">
+        <% if (listing.hotelIncluded) { %>
+          <div class="include-icon-box">
+            <div class="include-icon-circle"><i class="fa-solid fa-hotel"></i></div>
+            <span>Hotel</span>
+          </div>
+        <% } %>
+
+        <% if (listing.mealsIncluded) { %>
+          <div class="include-icon-box">
+            <div class="include-icon-circle"><i class="fa-solid fa-utensils"></i></div>
+            <span>Meals</span>
+          </div>
+        <% } %>
+
+        <% if (listing.transportIncluded) { %>
+          <div class="include-icon-box">
+            <div class="include-icon-circle"><i class="fa-solid fa-bus"></i></div>
+            <span>Transport</span>
+          </div>
+        <% } %>
+
+        <% if (listing.sightseeingIncluded) { %>
+          <div class="include-icon-box">
+            <div class="include-icon-circle"><i class="fa-solid fa-camera"></i></div>
+            <span>Sightseeing</span>
+          </div>
+        <% } %>
+      </div>
+
+      <% if (highlightList.length > 0) { %>
+        <div class="premium-highlights-list">
+          <% highlightList.forEach(function(item) { %>
+            <% if (item && item.trim()) { %>
+              <div class="highlight-row">
+                <i class="fa-solid fa-circle-check"></i>
+                <span><%= item %></span>
+              </div>
+            <% } %>
+          <% }) %>
+        </div>
+      <% } else { %>
+        <p class="text-muted mb-0">No highlights added yet.</p>
+      <% } %>
+    </div>
+
+    <!-- BOOKING FORM -->
+    <div class="premium-side-card booking-premium-card">
+      <div class="booking-top-bar">
+        <div>
+          <p class="booking-label mb-1">Starting From</p>
+          <h3 class="booking-premium-price mb-0">₹ <%= Number(finalPrice).toLocaleString("en-IN") %></h3>
+        </div>
+        <span class="booking-per-person">/ person</span>
+      </div>
+
+      <form id="bookingForm" action="/bookings/request" method="POST" class="premium-booking-form">
+        <input type="hidden" name="listingId" value="<%= listing._id %>">
+        <input type="hidden" name="departure" id="departureHidden" value="">
+
+        <div class="premium-field-group">
+          <label class="premium-label">Duration</label>
+          <div class="premium-input-wrap">
+            <i class="fa-regular fa-clock"></i>
+            <input type="text" class="form-control premium-input" value="<%= listing.duration || 'Tour Duration' %>" readonly>
+          </div>
+        </div>
+
+        <div class="premium-field-group">
+          <label class="premium-label">Starting Point</label>
+          <div class="premium-input-wrap">
+            <i class="fa-solid fa-location-dot"></i>
+            <input type="text" class="form-control premium-input" value="<%= listing.startingPoint || listing.location %>" readonly>
+          </div>
+        </div>
+
+        <div class="premium-field-group">
+          <label class="premium-label">No. of Students</label>
+          <div class="premium-input-wrap">
+            <i class="fa-solid fa-users"></i>
+           <input 
+  type="number" 
+  name="students"
+  id="students" 
+  class="form-control premium-input" 
+  value="1" 
+  min="1" 
+  required
+>
+          </div>
+        </div>
+
+        <div class="premium-field-group">
+          <label class="premium-label">Preferred Batch / Departure</label>
+          <div class="premium-input-wrap">
+            <i class="fa-regular fa-calendar-days"></i>
+            <select id="departure" class="form-control premium-input" required>
+              <% if (departureBatches.length > 0) { %>
+                <option value="">Select Batch</option>
+                <% departureBatches.forEach(function(batch) { %>
+                  <% if (batch.date) { %>
+                    <option value="<%= batch.date %>" data-seats="<%= batch.seats || 0 %>">
+                      <%= batch.date %> (Seats: <%= batch.seats || 0 %>)
+                    </option>
+                  <% } %>
+                <% }) %>
+              <% } else { %>
+                <option value="">No batches available</option>
+              <% } %>
+            </select>
+          </div>
+        </div>
+
+        <div class="premium-field-group">
+          <label class="premium-label">College Name</label>
+          <div class="premium-input-wrap">
+            <i class="fa-solid fa-building-columns"></i>
+            <input type="text" id="collegeName" class="form-control premium-input" placeholder="Enter college name" required>
+          </div>
+        </div>
+
+        <div class="premium-field-group">
+          <label class="premium-label">Coordinator Name</label>
+          <div class="premium-input-wrap">
+            <i class="fa-solid fa-user-tie"></i>
+            <input type="text" id="coordinatorName" class="form-control premium-input" placeholder="Enter coordinator name" required>
+          </div>
+        </div>
+
+        <div class="premium-field-group">
+          <label class="premium-label">Phone</label>
+          <div class="premium-input-wrap">
+            <i class="fa-solid fa-phone"></i>
+            <input type="text" id="phone" class="form-control premium-input" placeholder="Enter phone number" required>
+          </div>
+        </div>
+
+        <div class="premium-field-group">
+          <label class="premium-label">Special Request</label>
+          <div class="premium-textarea-wrap">
+            <i class="fa-regular fa-pen-to-square"></i>
+            <textarea id="specialRequest" class="form-control premium-input premium-textarea" rows="3" placeholder="Any special requirement"></textarea>
+          </div>
+        </div>
+
+        <div class="premium-field-group">
+  <label class="premium-label">College ID / Permission Letter</label>
+  <div class="premium-input-wrap">
+    <i class="fa-solid fa-file-shield"></i>
+    <input
+      type="file"
+      id="collegeProof"
+      name="collegeProof"
+      class="form-control premium-input"
+      accept=".jpg,.jpeg,.png,.pdf"
+      required
+    >
+  </div>
+</div>
+
+        <div class="booking-trust-box">
+          <div class="trust-item"><i class="fa-solid fa-shield-heart"></i> Secure Request</div>
+          <div class="trust-item"><i class="fa-solid fa-bolt"></i> Fast Response</div>
+        </div>
+        <div class="form-check mt-3 mb-3">
+  <input
+    class="form-check-input"
+    type="checkbox"
+    id="agreeTerms"
+  >
+  <label class="form-check-label small" for="agreeTerms">
+    I agree to the
+    <a href="/privacy" target="_blank">Privacy Policy</a>
+    and
+    <a href="/terms" target="_blank">Terms & Conditions</a>.
+  </label>
+</div>
+
+        <button id="requestBtn" class="premium-booking-btn w-100 mt-2" type="button">
+          <i class="fa-solid fa-paper-plane me-2"></i>Send Booking Request
+        </button>
+      </form>
+    </div>
+
+  </div>
+</div>
+
+  </div>
+</div>
+
+<script>
+  var studentsInput = document.getElementById("students");
+  var totalPriceEl = document.getElementById("totalPrice");
+  var studentsHidden = document.getElementById("studentsHidden");
+  var departureEl = document.getElementById("departure");
+  var departureHidden = document.getElementById("departureHidden");
+  var basePrice = Number("<%= Number(finalPrice) %>");
+
+  function updateTotal() {
+    if (!studentsInput || !totalPriceEl) return;
+
+    var students = Number(studentsInput.value || 1);
+    var total = basePrice * students;
+    totalPriceEl.innerText = total.toLocaleString("en-IN");
+
+    if (studentsHidden) {
+      studentsHidden.value = students;
+    }
+  }
+
+  if (studentsInput) {
+    studentsInput.addEventListener("input", updateTotal);
+    updateTotal();
+  }
+
+  if (departureEl && departureHidden) {
+    departureEl.addEventListener("change", function () {
+      departureHidden.value = departureEl.value;
+    });
+  }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+  var requestBtn = document.getElementById("requestBtn");
+
+  if (requestBtn) {
+    requestBtn.addEventListener("click", async function (e) {
+      e.preventDefault();
+
+      var listingId = document.querySelector('input[name="listingId"]').value;
+      var students = document.getElementById("students").value;
+      var departure = document.getElementById("departureHidden").value;
+      var collegeName = document.getElementById("collegeName").value;
+      var coordinatorName = document.getElementById("coordinatorName").value;
+      var phone = document.getElementById("phone").value;
+      var specialRequest = document.getElementById("specialRequest").value;
+      var collegeProof = document.getElementById("collegeProof").files[0];
+
+if (!collegeProof) {
+  Swal.fire({
+    icon: "warning",
+    title: "College Proof Required ⚠️",
+    text: "Please upload College ID or Permission Letter.",
+    confirmButtonColor: "#d32f2f"
+  });
+  return;
+}
+      var agreeTerms = document.getElementById("agreeTerms");
+
+if (!agreeTerms || !agreeTerms.checked) {
+  Swal.fire({
+    icon: "warning",
+    title: "Terms Required ⚠️",
+    text: "Please agree to Privacy Policy and Terms & Conditions before sending booking request.",
+    confirmButtonColor: "#d32f2f"
+  });
+  return;
+}
+      if (!departure) {
+       Swal.fire({
+  icon: "warning",
+  title: "Select Batch ⚠️",
+  text: "Please select a departure batch",
+  confirmButtonColor: "#d32f2f"
+});
+        return;
+      }
+
+      requestBtn.innerText = "Sending...";
+      requestBtn.disabled = true;
+
+      try {
+var formData = new FormData();
+formData.append("listingId", listingId);
+formData.append("students", Number(students));
+formData.append("departure", departure);
+formData.append("collegeName", collegeName);
+formData.append("coordinatorName", coordinatorName);
+formData.append("phone", phone);
+formData.append("specialRequest", specialRequest);
+formData.append("collegeProof", collegeProof);
+
+var res = await fetch("/bookings/request", {
+  method: "POST",
+  body: formData,
+  headers: {
+    Accept: "application/json"
+  }
+});
+
+var data = await res.json();
+
+if (res.status === 401 || data.loginRequired) {
+  Swal.fire({
+    icon: "warning",
+    title: "Login Required 🔐",
+    text: "Please login first to send booking request.",
+    confirmButtonColor: "#d32f2f"
+  }).then(() => {
+    window.location.href = data.redirectUrl || "/login";
+  });
+  return;
+}
+
+   if (data.success) {
+  Swal.fire({
+    icon: "success",
+    title: "Booking Request Sent 🎉",
+    text: data.message,
+    confirmButtonColor: "#d32f2f"
+  }).then(() => {
+    window.location.href = `/bookings/${data.bookingId}/student-details`;
+  });
+  return;
+} else {
+          Swal.fire({
+  icon: "error",
+  title: "Booking Failed ❌",
+  text: data.error || "Something went wrong",
+  confirmButtonColor: "#d32f2f"
+});
+        }
+
+      } catch (err) {
+        console.log(err);
+        Swal.fire({
+  icon: "error",
+  title: "Server Error ⚠️",
+  text: "Please try again later",
+  confirmButtonColor: "#d32f2f"
+});
+      }
+
+      requestBtn.innerText = "Send Booking Request";
+      requestBtn.disabled = false;
+    });
+  }
+</script>
+
+<script>
+  function openTab(evt, tabId) {
+    document.querySelectorAll(".tab-content").forEach(function(tab) {
+      tab.classList.remove("active");
+    });
+
+    document.querySelectorAll(".tab-btn").forEach(function(btn) {
+      btn.classList.remove("active");
+    });
+
+    document.getElementById(tabId).classList.add("active");
+    evt.currentTarget.classList.add("active");
+  }
+</script>

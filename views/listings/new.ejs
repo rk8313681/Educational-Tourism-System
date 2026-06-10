@@ -1,0 +1,348 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="row mt-4 mb-5">
+  <div class="col-lg-10 offset-lg-1">
+    <h3 class="mb-4">Create a New Educational Tour Package</h3>
+
+    <form method="POST" action="/listings" novalidate class="needs-validation" enctype="multipart/form-data">
+
+      <div class="card shadow-sm border-0 rounded-4 p-4 mb-4">
+        <h4 class="mb-3">Basic Details</h4>
+
+        <div class="mb-3">
+          <label class="form-label">Package Title</label>
+          <input name="listing[title]" placeholder="Add package title" type="text" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Description</label>
+          <textarea name="listing[description]" class="form-control" rows="4" placeholder="Enter package description" required></textarea>
+        </div>
+
+        <div class="row">
+          <div class="mb-3 col-md-4">
+            <label class="form-label">Duration</label>
+            <input name="listing[duration]" type="text" class="form-control" placeholder="Example: 3N/4D">
+          </div>
+
+          <div class="mb-3 col-md-4">
+            <label class="form-label">Price Per Person</label>
+            <input name="listing[pricePerPerson]" type="number" class="form-control" placeholder="Enter price per person" min="0">
+          </div>
+
+          <div class="mb-3 col-md-4">
+            <label class="form-label">Base Price</label>
+            <input name="listing[price]" type="number" class="form-control" placeholder="Enter base price" min="0" required>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="mb-3 col-md-4">
+            <label class="form-label">Tour Code</label>
+            <input name="listing[tourCode]" type="text" class="form-control" placeholder="Example: EDU2026-01">
+          </div>
+
+          <div class="mb-3 col-md-4">
+            <label class="form-label">Starting Point</label>
+            <input name="listing[startingPoint]" type="text" class="form-control" placeholder="Example: Delhi">
+          </div>
+
+          <div class="mb-3 col-md-4">
+            <label class="form-label">Availability</label>
+            <select name="listing[availability]" class="form-select">
+              <option value="available">Available</option>
+              <option value="on-request">On Request</option>
+              <option value="sold-out">Sold Out</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="mb-3 col-md-4">
+            <label class="form-label">Package Type</label>
+            <input name="listing[packageType]" type="text" class="form-control" placeholder="Example: Educational Tour">
+          </div>
+
+          <div class="mb-3 col-md-4">
+            <label class="form-label">Category</label>
+            <input name="listing[category]" type="text" class="form-control" value="Educational Tour">
+          </div>
+
+          <div class="mb-3 col-md-4">
+            <label class="form-label">Country</label>
+            <input name="listing[country]" type="text" class="form-control" value="India" required>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Location</label>
+          <input name="listing[location]" type="text" class="form-control" placeholder="Enter main location" required>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">About Location</label>
+          <textarea name="listing[aboutLocation]" class="form-control" rows="3" placeholder="Write about the destination"></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Upload Listing Image</label>
+          <input name="listing[image]" type="file" class="form-control" required>
+        </div>
+      </div>
+
+      <div class="card shadow-sm border-0 rounded-4 p-4 mb-4">
+        <h4 class="mb-3">Package Includes</h4>
+
+        <div class="row">
+          <div class="col-md-3 mb-2"><label><input type="checkbox" name="listing[mealsIncluded]"> Meals Included</label></div>
+          <div class="col-md-3 mb-2"><label><input type="checkbox" name="listing[sightseeingIncluded]"> Sightseeing Included</label></div>
+          <div class="col-md-3 mb-2"><label><input type="checkbox" name="listing[hotelIncluded]"> Hotel Included</label></div>
+          <div class="col-md-3 mb-2"><label><input type="checkbox" name="listing[transportIncluded]"> Transport Included</label></div>
+        </div>
+      </div>
+
+      <div class="card shadow-sm border-0 rounded-4 p-4 mb-4">
+        <h4 class="mb-3">Hotel Details</h4>
+
+        <div class="row">
+          <div class="mb-3 col-md-6">
+            <label class="form-label">Hotel Name</label>
+            <input name="listing[hotel][hotelName]" type="text" class="form-control" placeholder="Enter hotel name">
+          </div>
+
+          <div class="mb-3 col-md-6">
+            <label class="form-label">Room Type</label>
+            <input name="listing[hotel][roomType]" type="text" class="form-control" placeholder="Example: Triple Sharing">
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="mb-3 col-md-4">
+            <label class="form-label">Nights</label>
+            <input name="listing[hotel][nights]" type="number" class="form-control" placeholder="Number of nights" min="0">
+          </div>
+
+          <div class="mb-3 col-md-8">
+            <label class="form-label">Hotel Address</label>
+            <input name="listing[hotel][hotelAddress]" type="text" class="form-control" placeholder="Enter hotel address / area">
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Stay Notes</label>
+          <textarea name="listing[hotel][stayNotes]" class="form-control" rows="2" placeholder="Example: Early check-in subject to availability"></textarea>
+        </div>
+      </div>
+
+      <div class="card shadow-sm border-0 rounded-4 p-4 mb-4">
+        <h4 class="mb-3">Meals Details</h4>
+
+        <div class="row mb-3">
+          <div class="col-md-3"><label><input type="checkbox" name="listing[meals][breakfast]"> Breakfast</label></div>
+          <div class="col-md-3"><label><input type="checkbox" name="listing[meals][lunch]"> Lunch</label></div>
+          <div class="col-md-3"><label><input type="checkbox" name="listing[meals][dinner]"> Dinner</label></div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Meal Plan</label>
+          <input name="listing[meals][mealPlan]" type="text" class="form-control" placeholder="Example: MAP / Breakfast + Dinner">
+        </div>
+      </div>
+
+      <div class="card shadow-sm border-0 rounded-4 p-4 mb-4">
+        <h4 class="mb-3">Transport Details</h4>
+
+        <div class="row">
+          <div class="mb-3 col-md-4">
+            <label class="form-label">Transport Type</label>
+            <select name="listing[transport][type]" class="form-select">
+              <option value="">Select</option>
+              <option value="bus">Bus</option>
+              <option value="car">Car</option>
+            </select>
+          </div>
+
+          <div class="mb-3 col-md-4">
+            <label class="form-label">Vehicle Name</label>
+            <input name="listing[transport][vehicleName]" type="text" class="form-control" placeholder="Example: Volvo Bus / Innova">
+          </div>
+
+          <div class="mb-3 col-md-4">
+            <label class="form-label">Capacity</label>
+            <input name="listing[transport][capacity]" type="number" class="form-control" placeholder="Enter capacity" min="0">
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="mb-3 col-md-6">
+            <label class="form-label">Pickup Point</label>
+            <input name="listing[transport][pickupPoint]" type="text" class="form-control" placeholder="Enter pickup point">
+          </div>
+
+          <div class="mb-3 col-md-6">
+            <label class="form-label">Drop Point</label>
+            <input name="listing[transport][dropPoint]" type="text" class="form-control" placeholder="Enter drop point">
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-3 mb-2"><label><input type="checkbox" name="listing[transport][driverIncluded]" checked> Driver Included</label></div>
+          <div class="col-md-3 mb-2"><label><input type="checkbox" name="listing[transport][fuelIncluded]" checked> Fuel Included</label></div>
+        </div>
+      </div>
+
+      <div class="card shadow-sm border-0 rounded-4 p-4 mb-4">
+        <h4 class="mb-3">Departure Batches</h4>
+
+        <div class="row">
+          <div class="mb-3 col-md-6">
+            <label class="form-label">Batch 1 Date</label>
+            <input name="listing[departureBatches][0][date]" type="text" class="form-control" placeholder="10 May 2026">
+          </div>
+
+          <div class="mb-3 col-md-6">
+            <label class="form-label">Seats</label>
+            <input name="listing[departureBatches][0][seats]" type="number" class="form-control" placeholder="40">
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="mb-3 col-md-6">
+            <label class="form-label">Batch 2 Date</label>
+            <input name="listing[departureBatches][1][date]" type="text" class="form-control" placeholder="25 May 2026">
+          </div>
+
+          <div class="mb-3 col-md-6">
+            <label class="form-label">Seats</label>
+            <input name="listing[departureBatches][1][seats]" type="number" class="form-control" placeholder="40">
+          </div>
+        </div>
+      </div>
+
+      <div class="card shadow-sm border-0 rounded-4 p-4 mb-4">
+        <h4 class="mb-3">Package Sections</h4>
+
+        <div class="mb-3">
+          <label class="form-label">Nearby Places</label>
+          <textarea name="listing[nearbyPlaces]" class="form-control" rows="2" placeholder="Comma separated nearby places"></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Inclusions</label>
+          <textarea name="listing[inclusions]" class="form-control" rows="2" placeholder="Comma separated inclusions"></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Exclusions</label>
+          <textarea name="listing[exclusions]" class="form-control" rows="2" placeholder="Comma separated exclusions"></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Tour Highlights</label>
+          <textarea name="listing[tourHighlights]" class="form-control" rows="2" placeholder="Comma separated tour highlights"></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Package Policy</label>
+          <textarea name="listing[packagePolicy]" class="form-control" rows="2" placeholder="Comma separated policies"></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Cancellation Policy</label>
+          <textarea name="listing[cancellationPolicy]" class="form-control" rows="2" placeholder="Comma separated cancellation policy points"></textarea>
+        </div>
+      </div>
+
+      <div class="card shadow-sm border-0 rounded-4 p-4 mb-4">
+        <h4 class="mb-3">Tour Itinerary</h4>
+
+        <% for (let i = 0; i < 2; i++) { %>
+          <div class="border rounded-4 p-3 mb-4">
+            <h5>Day <%= i + 1 %></h5>
+
+            <div class="row">
+              <div class="mb-3 col-md-2">
+                <label class="form-label">Day</label>
+                <input name="listing[itinerary][<%= i %>][day]" type="number" class="form-control" value="<%= i + 1 %>">
+              </div>
+
+              <div class="mb-3 col-md-5">
+                <label class="form-label">Title</label>
+                <input name="listing[itinerary][<%= i %>][title]" type="text" class="form-control">
+              </div>
+
+              <div class="mb-3">
+  <label class="form-label">Tour Category</label>
+  <select name="listing[category]" class="form-control" required>
+    <option value="college">College Campus Tours</option>
+    <option value="industrial">Industrial Visits</option>
+    <option value="science">Science & Research Tours</option>
+    <option value="government">Government Institution Visits</option>
+    <option value="career">Career Exposure Tours</option>
+  </select>
+</div>
+
+              <div class="mb-3 col-md-5">
+                <label class="form-label">Subtitle</label>
+                <input name="listing[itinerary][<%= i %>][subtitle]" type="text" class="form-control">
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Description</label>
+              <textarea name="listing[itinerary][<%= i %>][description]" class="form-control" rows="2"></textarea>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Stay</label>
+              <input name="listing[itinerary][<%= i %>][stay]" type="text" class="form-control">
+            </div>
+
+            <div class="row">
+              <div class="mb-3 col-md-3">
+                <label class="form-label">From</label>
+                <input name="listing[itinerary][<%= i %>][transport][from]" type="text" class="form-control">
+              </div>
+
+              <div class="mb-3 col-md-3">
+                <label class="form-label">To</label>
+                <input name="listing[itinerary][<%= i %>][transport][to]" type="text" class="form-control">
+              </div>
+
+              <div class="mb-3 col-md-2">
+                <label class="form-label">Mode</label>
+                <select name="listing[itinerary][<%= i %>][transport][mode]" class="form-select">
+                  <option value="">Select</option>
+                  <option value="bus">Bus</option>
+                  <option value="car">Car</option>
+                </select>
+              </div>
+
+              <div class="mb-3 col-md-2">
+                <label class="form-label">Distance</label>
+                <input name="listing[itinerary][<%= i %>][transport][distance]" type="text" class="form-control">
+              </div>
+
+              <div class="mb-3 col-md-2">
+                <label class="form-label">Time</label>
+                <input name="listing[itinerary][<%= i %>][transport][time]" type="text" class="form-control">
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Meals (comma separated)</label>
+              <input name="listing[itinerary][<%= i %>][meals]" type="text" class="form-control">
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Activities (comma separated)</label>
+              <input name="listing[itinerary][<%= i %>][activities]" type="text" class="form-control">
+            </div>
+          </div>
+        <% } %>
+      </div>
+
+      <button class="btn btn-dark add-btn mt-3">Add Package</button>
+    </form>
+  </div>
+</div>

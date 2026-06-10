@@ -1,0 +1,99 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="container mt-5 mb-5">
+
+  <div class="card border-0 shadow-lg rounded-4 p-4">
+
+    <h2 class="fw-bold mb-2">
+      Student Verification Form
+    </h2>
+
+    <p class="text-muted mb-4">
+      Please upload details of all students for verification.
+    </p>
+
+    <div class="alert alert-warning">
+      Total Students:
+      <strong><%= booking.students %></strong>
+    </div>
+
+    <form
+      action="/bookings/<%= booking._id %>/student-details"
+      method="POST"
+      enctype="multipart/form-data"
+    >
+
+      <% for(let i = 0; i < booking.students; i++) { %>
+
+        <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
+
+          <h5 class="fw-bold mb-3">
+            Student <%= i + 1 %>
+          </h5>
+
+          <div class="mb-3">
+            <label class="form-label">
+              Full Name
+            </label>
+
+            <input
+              type="text"
+              name="fullName"
+              class="form-control"
+              required
+            >
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">
+              Enrollment Number
+            </label>
+
+            <input
+              type="text"
+              name="enrollmentNo"
+              class="form-control"
+              required
+            >
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">
+              Phone Number
+            </label>
+
+            <input
+              type="text"
+              name="studentPhone"
+              class="form-control"
+              required
+            >
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">
+              Upload Student ID
+            </label>
+
+            <input
+              type="file"
+              name="studentProofs"
+              class="form-control"
+              accept=".jpg,.jpeg,.png,.pdf"
+              required
+            >
+          </div>
+
+        </div>
+
+      <% } %>
+
+      <button class="btn btn-dark btn-lg">
+        Submit Student Details
+      </button>
+
+    </form>
+
+  </div>
+
+</div>

@@ -1,0 +1,342 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="container mt-5 mb-5">
+  <h2 class="fw-bold mb-4">My Bookings</h2>
+
+  <div class="row">
+    <% if (bookings && bookings.length > 0) { %>
+      <% bookings.forEach(function(b) { %>
+        <div class="col-md-6 col-lg-4 mb-4">
+          <div class="card shadow-sm border-0 rounded-4 h-100">
+            <img
+              src="<%= b.listing && b.listing.image && b.listing.image.url ? b.listing.image.url : 'https://via.placeholder.com/400x250' %>"
+              class="card-img-top rounded-top-4"
+              style="height:220px; object-fit:cover;"
+              alt="Tour Image"
+            >
+
+            <div class="card-body">
+              <h5 class="fw-bold">
+                <%= b.listing && b.listing.title ? b.listing.title : "Deleted Listing" %>
+              </h5>
+
+              <p class="mb-1">
+                <strong>Location:</strong>
+                <%= b.listing && b.listing.location ? b.listing.location : "-" %>
+              </p>
+
+              <p class="mb-1">
+                <strong>Duration:</strong>
+                <%= b.listing && b.listing.duration ? b.listing.duration : "-" %>
+              </p>
+
+              <p class="mb-1">
+                <strong>Departure:</strong>
+                <%= b.departure || "To be confirmed" %>
+              </p>
+
+              <p class="mb-1">
+                <strong>Students:</strong>
+                <%= b.students || 1 %>
+              </p>
+
+              <p class="mb-1">
+  <strong>College:</strong>
+  <%= b.collegeName || "-" %>
+</p>
+
+<p class="mb-1">
+  <strong>Coordinator:</strong>
+  <%= b.coordinatorName || "-" %>
+</p>
+
+<p class="mb-1">
+  <strong>Phone:</strong>
+  <%= b.phone || "-" %>
+</p>
+
+<% if (b.specialRequest) { %>
+  <p class="mb-1">
+    <strong>Request:</strong>
+    <%= b.specialRequest %>
+  </p>
+<% } %>
+
+              <p class="mb-1">
+                <strong>Total:</strong>
+                ₹ <%= Number(b.totalPrice || 0).toLocaleString("en-IN") %>
+              </p>
+
+              <p class="mb-2">
+                <strong>Status:</strong>
+<span class="badge 
+  <%= b.status === 'pending'
+    ? 'bg-warning text-dark'
+    : b.status === 'payment_pending'
+    ? 'bg-info text-dark'
+    : b.status === 'low_booking'
+    ? 'bg-warning text-dark'
+    : b.status === 'confirmed'
+    ? 'bg-success'
+    : b.status === 'completed'
+    ? 'bg-primary'
+    : 'bg-danger' %>">
+<%= b.status === "pending"
+  ? "Pending Approval"
+  : b.status === "payment_pending"
+  ? "Approved - Payment Pending"
+  : b.status === "low_booking"
+  ? "Waiting for Minimum Students"
+  : b.status === "confirmed"
+  ? "Confirmed"
+  : b.status === "completed"
+  ? "Completed"
+  : "Cancelled" %>
+                </span>
+              </p>
+
+              <p class="mb-2">
+                <strong>Payment:</strong>
+                <span class="badge <%= b.paymentStatus === 'paid' ? 'bg-success' : 'bg-secondary' %>">
+                  <%= b.paymentStatus === "paid" ? "Paid" : "Pending" %>
+                </span>
+              </p>
+
+             <div class="booking-timeline mb-3">
+  <% if (b.status === "cancelled") { %>
+    <div class="timeline-row cancelled">
+      <div class="timeline-step done">Requested</div>
+      <div class="timeline-line cancelled-line"></div>
+      <div class="timeline-step cancelled-step">Cancelled</div>
+    </div>
+  <% } else if (b.status === "low_booking") { %>
+    <div class="timeline-row">
+      <div class="timeline-step done">Requested</div>
+      <div class="timeline-line"></div>
+      <div class="timeline-step">Min Seats</div>
+      <div class="timeline-line"></div>
+      <div class="timeline-step">Payment</div>
+      <div class="timeline-line"></div>
+      <div class="timeline-step">Confirmed</div>
+    </div>
+
+  <% } else { %>
+    <div class="timeline-row">
+      <div class="timeline-step <%= ["pending","payment_pending","confirmed","completed"].includes(b.status) ? "done" : "" %>">
+        Requested
+      </div>
+
+      <div class="timeline-line <%= ["payment_pending","confirmed","completed"].includes(b.status) ? "done-line" : "" %>"></div>
+
+      <div class="timeline-step <%= ["payment_pending","confirmed","completed"].includes(b.status) ? "done" : "" %>">
+        Payment
+      </div>
+
+      <div class="timeline-line <%= ["confirmed","completed"].includes(b.status) ? "done-line" : "" %>"></div>
+
+      <div class="timeline-step <%= ["confirmed","completed"].includes(b.status) ? "done" : "" %>">
+        Confirmed
+      </div>
+
+      <div class="timeline-line <%= b.status === "completed" ? "done-line" : "" %>"></div>
+
+      <div class="timeline-step <%= b.status === "completed" ? "done" : "" %>">
+        Completed
+      </div>
+    </div>
+  <% } %>
+</div>
+<% if (b.status === "low_booking") { %>
+
+  <% if (b.finalDecision === "waiting") { %>
+
+    <div class="alert alert-warning mb-3 rounded-4">
+      <strong>Waiting for Minimum Students</strong><br>
+
+This tour requires minimum students before confirmation.<br>
+Final decision will be taken around 7 days before departure.
+
+<ul class="mb-0 mt-2 text-start">
+  <li>Tour may proceed</li>
+  <li>Booking may shift to another batch</li>
+  <li>Full refund may be initiated</li>
+</ul>
+    </div>
+
+  <% } %>
+
+<% } %>
+
+<% if (b.finalDecision === "rescheduled") { %>
+
+  <div class="alert alert-info mb-3 rounded-4">
+    <strong>Tour Rescheduled</strong><br>
+
+    Your booking has been shifted to:
+    <b><%= b.rescheduledDeparture || "Next Batch" %></b>
+  </div>
+
+<% } %>
+
+<% if (b.finalDecision === "refund_initiated") { %>
+
+  <div class="alert alert-danger mb-3 rounded-4">
+    <strong>Refund Initiated</strong><br>
+
+    Minimum required students were not reached.
+
+    Refund Status:
+    <b><%= b.refundStatus %></b>
+
+    Refund will be processed within 5-7 working days.
+  </div>
+
+<% } %>
+
+<% if (
+  b.finalDecision === "proceed_anyway" &&
+  b.paymentStatus !== "paid" &&
+  b.status !== "confirmed"
+) { %>
+
+  <div class="alert alert-success mb-3 rounded-4">
+    <strong>Special Approval Granted</strong><br>
+    Admin approved this tour despite low bookings. You can now complete payment.
+  </div>
+
+<% } %>
+
+              <% if (b.adminNote) { %>
+                <p class="mb-1"><strong>Admin Note:</strong> <%= b.adminNote %></p>
+              <% } %>
+
+              <% if (b.cancelledBy) { %>
+                <p class="mb-1"><strong>Cancelled By:</strong> <%= b.cancelledBy %></p>
+              <% } %>
+
+              <% if (b.cancelReason) { %>
+                <p class="mb-3"><strong>Cancel Reason:</strong> <%= b.cancelReason %></p>
+              <% } %>
+
+<div class="d-flex gap-2 flex-wrap">
+
+  <% if (b.status === "pending" || b.status === "low_booking") { %>
+<form
+  method="GET"
+  action="/bookings/<%= b._id %>/student-details"
+  class="d-flex gap-2"
+>
+
+  <input
+    type="number"
+    name="newStudents"
+    min="1"
+    placeholder="+ Students"
+    class="add-student-input"
+    required
+  >
+
+  <button class="btn btn-primary btn-sm add-btn">
+    Add
+  </button>
+
+</form>
+  <% } %>
+
+  <% if (b.status === "payment_pending" && b.paymentStatus !== "paid") { %>
+    <button
+      type="button"
+      class="btn btn-success btn-sm pay-btn"
+      data-booking-id="<%= b._id %>"
+    >
+      Pay Now
+    </button>
+  <% } %>
+
+<% if (
+b.status === "pending" ||
+b.status === "payment_pending" ||
+b.status === "low_booking"
+                ) { %>
+                  <form method="POST" action="/bookings/<%= b._id %>?_method=DELETE">
+                    <button class="btn btn-danger btn-sm">Cancel Booking</button>
+                  </form>
+                <% } %>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% }) %>
+    <% } else { %>
+      <p>No bookings found.</p>
+    <% } %>
+  </div>
+</div>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<script>
+  document.querySelectorAll(".pay-btn").forEach(function (btn) {
+    btn.addEventListener("click", async function () {
+      const bookingId = this.getAttribute("data-booking-id");
+
+      try {
+        const orderRes = await fetch(`/bookings/${bookingId}/create-order`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          }
+        });
+
+        const orderData = await orderRes.json();
+
+        if (!orderRes.ok) {
+          alert(orderData.error || "Could not create payment order.");
+          return;
+        }
+
+        const options = {
+          key: orderData.key,
+          amount: orderData.amount,
+          currency: orderData.currency,
+          name: "Educational Tourism",
+          description: orderData.title,
+          order_id: orderData.orderId,
+          prefill: {
+            name: orderData.name || "",
+            email: orderData.email || "",
+            contact: orderData.contact || ""
+          },
+          handler: async function (response) {
+            const verifyRes = await fetch(`/bookings/${bookingId}/verify-payment`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify(response)
+            });
+
+            const verifyData = await verifyRes.json();
+
+            if (!verifyRes.ok) {
+              alert(verifyData.error || "Payment verification failed.");
+              return;
+            }
+
+            alert(verifyData.message || "Payment successful!");
+            window.location.reload();
+          },
+          theme: {
+            color: "#0d6efd"
+          }
+        };
+
+        const rzp = new Razorpay(options);
+        rzp.open();
+      } catch (err) {
+        console.log("PAYMENT UI ERROR:", err);
+        alert("Could not start payment.");
+      }
+    });
+  });
+</script>

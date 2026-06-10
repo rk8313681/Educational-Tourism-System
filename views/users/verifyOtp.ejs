@@ -1,0 +1,106 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="auth-page">
+  <div class="auth-card auth-card-small">
+
+    <div class="auth-left otp-bg">
+      <div class="auth-overlay"></div>
+      <div class="auth-left-content">
+        <div class="auth-brand-mini">
+          <i class="fa-solid fa-graduation-cap"></i>
+          <span>Educational Tourism</span>
+        </div>
+
+        <span class="auth-tag">OTP Verification</span>
+        <h2>Verify Your OTP</h2>
+        <p>
+          Enter your username, email, OTP, and set a new secure password
+          for your account.
+        </p>
+      </div>
+    </div>
+
+    <div class="auth-right">
+      <h1>OTP Verification</h1>
+      <p class="auth-subtext">Enter OTP and reset your password</p>
+
+      <form action="/verify-otp" method="POST" class="auth-form" onsubmit="return validateResetPasswordForm()">
+        <div class="auth-group">
+          <label for="username">Username</label>
+          <input type="text" id="username" name="username" placeholder="Enter your username" required>
+        </div>
+
+        <div class="auth-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" name="email" placeholder="Enter your email" required>
+        </div>
+
+        <div class="auth-group">
+          <label for="otp">OTP</label>
+          <input type="text" id="otp" name="otp" placeholder="Enter 6-digit OTP" required>
+        </div>
+
+        <div class="auth-group">
+          <label for="newPassword">New Password</label>
+          <div class="password-field">
+            <input type="password" id="newPassword" name="newPassword" placeholder="Enter new password" required>
+            <button type="button" class="password-toggle" onclick="togglePassword('newPassword', this)">
+              <i class="fa-solid fa-eye"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="auth-group">
+          <label for="confirmNewPassword">Confirm New Password</label>
+          <div class="password-field">
+            <input type="password" id="confirmNewPassword" name="confirmNewPassword" placeholder="Confirm new password" required>
+            <button type="button" class="password-toggle" onclick="togglePassword('confirmNewPassword', this)">
+              <i class="fa-solid fa-eye"></i>
+            </button>
+          </div>
+        </div>
+
+        <p id="resetPasswordError" class="auth-error-text"></p>
+
+        <button class="auth-btn" type="submit">Verify & Reset Password</button>
+      </form>
+
+      <p class="auth-switch">
+        Back to
+        <a href="/login">Login</a>
+      </p>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  function togglePassword(fieldId, btn) {
+    const input = document.getElementById(fieldId);
+    const icon = btn.querySelector("i");
+
+    if (input.type === "password") {
+      input.type = "text";
+      icon.classList.remove("fa-eye");
+      icon.classList.add("fa-eye-slash");
+    } else {
+      input.type = "password";
+      icon.classList.remove("fa-eye-slash");
+      icon.classList.add("fa-eye");
+    }
+  }
+
+  function validateResetPasswordForm() {
+    const password = document.getElementById("newPassword").value;
+    const confirmPassword = document.getElementById("confirmNewPassword").value;
+    const errorEl = document.getElementById("resetPasswordError");
+
+    if (password !== confirmPassword) {
+      errorEl.innerText = "New password and confirm password do not match.";
+      return false;
+    }
+
+    errorEl.innerText = "";
+    return true;
+  }
+</script>

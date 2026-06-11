@@ -20,6 +20,8 @@ const bookingRoutes = require("./routes/bookings");
 const adminRoutes = require("./routes/admin");
 const contactRoutes = require("./routes/contact");
 const eventRoutes = require("./routes/events");
+const initData = require("./init/data.js");
+const Listing = require("./models/listing.js");
 
 
 const MONGO_URL = process.env.ATLASDB_URL || "mongodb://127.0.0.1:27017/user";
@@ -120,6 +122,27 @@ async function main() {
   await mongoose.connect(MONGO_URL);    
 }
 
+app.get("/admin-seed/:key", async (req, res) => {
+  try {
+    if (req.params.key !== process.env.SEED_SECRET) {
+      return res.status(403).send("Unauthorized");
+    }
+
+    await Listing.deleteMany({});
+
+    const dataWithOwner = initData.map((obj) => ({
+      ...obj,
+      owner: process.env.SEED_OWNER_ID || "69b403730b28c4f36bd3224d",
+    }));
+
+    await Listing.insertMany(dataWithOwner);
+
+    res.send("Database seeded successfully with tour packages");
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("Seed failed");
+  }
+});
 app.use("/listings", listingRouter);
 app.use("/listings/:id/reviews", reviewRouter);
 

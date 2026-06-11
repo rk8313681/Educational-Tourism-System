@@ -22,7 +22,7 @@ const contactRoutes = require("./routes/contact");
 const eventRoutes = require("./routes/events");
 
 
-const MONGO_URL="mongodb://127.0.0.1:27017/user";
+const MONGO_URL = process.env.ATLASDB_URL || "mongodb://127.0.0.1:27017/user";
 
 main().then(() => {
    console.log("connected to DB");
@@ -40,7 +40,7 @@ app.engine("ejs", ejsMate);
 app.use(express.static(path.join(__dirname, "/public")));
 
 const sessionOptions = {
-    secret: "mysupersecretcode",
+   secret: process.env.SECRET || "mysupersecretcode",
     resave: false,
     saveUninitialized: false,
     cookie: {
@@ -150,6 +150,8 @@ app.use((err, req, res, next) => {
     // res.status(statusCode).send(message);
 });
 
-app.listen(8080,() => {
-    console.log("server is listning to port 8080");
+const PORT = process.env.PORT || 8080;
+
+app.listen(PORT, () => {
+    console.log(`server is listening on port ${PORT}`);
 });
